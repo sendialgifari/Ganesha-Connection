@@ -1,0 +1,585 @@
+<x-main-layout>
+
+    {{-- <div id="default-carousel" class="relative w-full py-4" data-carousel="slide">
+        <!-- Carousel wrapper -->
+        <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+            <!-- Item 1 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="https://c4.wallpaperflare.com/wallpaper/410/867/750/vector-forest-sunset-forest-sunset-forest-wallpaper-preview.jpg"
+                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            </div>
+            <!-- Item 2 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="https://c4.wallpaperflare.com/wallpaper/410/867/750/vector-forest-sunset-forest-sunset-forest-wallpaper-preview.jpg"
+                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            </div>
+            <!-- Item 3 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="https://c4.wallpaperflare.com/wallpaper/410/867/750/vector-forest-sunset-forest-sunset-forest-wallpaper-preview.jpg"
+                    class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+            </div>
+        </div>
+        <!-- Slider indicators -->
+        <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1"
+                data-carousel-slide-to="0"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2"
+                data-carousel-slide-to="1"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3"
+                data-carousel-slide-to="2"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4"
+                data-carousel-slide-to="3"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5"
+                data-carousel-slide-to="4"></button>
+        </div>
+        <!-- Slider controls -->
+        <button type="button"
+            class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+            data-carousel-prev>
+            <span
+                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 1 1 5l4 4" />
+                </svg>
+                <span class="sr-only">Previous</span>
+            </span>
+        </button>
+        <button type="button"
+            class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+            data-carousel-next>
+            <span
+                class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 9 4-4-4-4" />
+                </svg>
+                <span class="sr-only">Next</span>
+            </span>
+        </button>
+    </div> --}}
+
+    {{-- @if (count($sliders) === 1) --}}
+        {{-- <Carousel class="py-4">
+            <x-splade-lazy>
+                <x-slot:placeholder> loading... </x-slot:placeholder>
+                @foreach ($sliders as $key => $slider)
+                    <CarouselSlide key="{{ $key }}">
+                        <img class="rounded-lg" style="width: 100%; max-height: 340px; object-fit: cover;"
+                            src="{{ $slider->image }}">
+                    </CarouselSlide>
+                @endforeach
+            </x-splade-lazy>
+        </Carousel> --}}
+    {{-- @else --}}
+    
+    <x-splade-lazy>
+        <x-slot:placeholder> loading... </x-slot:placeholder>
+        <Carousel :autoplay="5000" :wrap-around="true" class="py-4">
+            
+                @foreach ($sliders as $key => $slider)
+                    <CarouselSlide key="{{ $key }}">
+                        {{-- <div class="carousel__item">{{ $product->name }}</div> --}}
+                        <img class="rounded-lg" style="width: 100%; max-height: 340px; object-fit: cover;"
+                            src="{{ $slider->image }}">
+                    </CarouselSlide>
+                @endforeach
+            
+            {{-- <x-splade-lazy>
+                <x-slot:placeholder> loading... </x-slot:placeholder> --}}
+                {{-- @foreach ($sliders as $key => $slider)
+                    <CarouselSlide key="{{ $key }}">
+                        <div class="carousel__item">{{ $product->name }}</div>
+                        <img class="rounded-lg" style="width: 100%; max-height: 340px; object-fit: cover;"
+                            src="{{ $slider->image }}">
+                    </CarouselSlide>
+                @endforeach --}}
+            {{-- </x-splade-lazy> --}}
+            <template #addons>
+                <CarouselNavigation />
+                <CarouselPagination />
+            </template>
+        </Carousel>
+    </x-splade-lazy>
+    {{-- @endif --}}
+
+
+    <section class="grid gap-2 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
+        <div class="rounded-lg mb-6 p-6 bg-white dark:bg-gray-900 antialiased">
+            <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+                <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Kategori Produk
+                            Pilihan</h2>
+                    </div>
+                </div>
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {{-- <x-splade-lazy> --}}
+                    {{-- <x-slot:placeholder> loading... </x-slot:placeholder> --}}
+                    @foreach ($product_categories_selected as $idx => $item)
+                        <Link href="/search?type=produk&cat={{ $item->id }}" id="{{ $idx }}-product">
+                        <div class="rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-full h-full dark:hidden" src="{{ $item->image }}"
+                                    style="width: 100%; background: #e1e1e1" alt="{{ $item->name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                                <img class="mx-auto rounded-full hidden h-full dark:block" src="{{ $item->image }}"
+                                    alt="{{ $item->name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                            </div>
+                        </div>
+                        <div class="pt-1">
+                            <p
+                                class="text-md text-center font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                {{ $item->name }}</p>
+                        </div>
+                        </Link>
+                    @endforeach
+                    {{--
+                    </x-splade-lazy> --}}
+                </div>
+            </div>
+        </div>
+        <div class="rounded-lg mb-6 p-6 bg-white dark:bg-gray-900 antialiased">
+            <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+                <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Kategori Jasa
+                            Pilihan</h2>
+                    </div>
+                </div>
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {{-- <x-splade-lazy> --}}
+                    {{-- <x-slot:placeholder> loading... </x-slot:placeholder> --}}
+                    @foreach ($service_categories_selected as $idx => $item)
+                        <Link href="/search?type=jasa&cat={{ $item->id }}" id="{{ $idx }}-service">
+                        <div class="rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-full h-full dark:hidden" src="{{ $item->image }}"
+                                    style="width: 100%; background: #e1e1e1" alt="{{ $item->name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                                <img class="mx-auto rounded-full hidden h-full dark:block" src="{{ $item->image }}"
+                                    alt="{{ $item->name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                            </div>
+                        </div>
+                        <div class="pt-1">
+                            <p
+                                class="text-md text-center font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                {{ $item->name }}</p>
+                        </div>
+                        </Link>
+                    @endforeach
+                    {{--
+                    </x-splade-lazy> --}}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pt-4 antialiased dark:bg-gray-900 md:py-0">
+        <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Produk Pilihan</h2>
+            </div>
+        </div>
+
+
+
+
+        <div class="product-content-box dark:bg-gray-900 antialiased">
+            <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+                    {{-- <x-splade-lazy> --}}
+                    {{-- <x-slot:placeholder> loading... </x-slot:placeholder> --}}
+                    @foreach ($product_selected as $idx => $item)
+                        @if ($loop->first)
+                            <div class="product-title-box">
+                                <div class="product-title-box-logo"></div>
+                            </div>
+                        @endif
+                        <Link href="/produk/{{ $item->slug }}" id="{{ $idx }}-product">
+                        <div class="rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-top h-full dark:hidden" src="{{ $item->image_thumb }}"
+                                    style="width: 100%;" alt="{{ $item->name }}" />
+                                <img class="mx-auto rounded-top hidden h-full dark:block"
+                                    src="{{ $item->image_thumb }}" alt="{{ $item->name }}" />
+                            </div>
+                            @if ($item->admin_category)
+                                <div class="tag-product">{{ $item->admin_category->name }}
+                                </div>
+                            @endif
+                            <div class="pt-1 p-2" style="height: 160px;">
+                                <p
+                                    class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                    {{ $item->name }}</p>
+
+                                <div class="mt-1 flex items-center gap-2">
+
+
+                                    @if ($item->total_comments != 0)
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-yellow-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white">@php$ratings =
+                                                ($item->total_comment_star_1 * 1 +
+                                                    $item->total_comment_star_2 * 2 +
+                                                    $item->total_comment_star_3 * 3 +
+                                                    $item->total_comment_star_4 * 4 +
+                                                    $item->total_comment_star_5 * 5) /
+                                                $item->total_comments;
+                                        @endphp
+                                            {{ number_format($ratings, 1, '.', ',') }}</p>
+                                    @endif
+                                    {{-- Total komen tidak ada di migration --}}
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        ({{ $item->total_comments }} Review)</p>
+                                </div>
+                                <div class="mt-1 flex items-center justify-between gap-4">
+                                    <p class="text-md leading-tight text-gray-900 dark:text-white">
+                                        <span class="font-extrabold">Rp.
+                                            {{ number_format($item->price, 0, ',', '.') }}</span><br /><span
+                                            style="font-size: 13px"><del> Rp.
+                                                {{ number_format($item->fake_price, 0, ',', '.') }}</del>
+                                            <span style="color: red; font-size: 13px;"><b>
+                                                    ({{ round(100 - ($item->price / $item->fake_price) * 100) }}%)</b></span></span>
+                                    </p>
+                                </div>
+                                @foreach ($item->work_units as $work_unit)
+                                    <span
+                                        class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                        style="white-space: nowrap;">{{ $work_unit->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                        </Link>
+                    @endforeach
+                    {{--
+                </x-splade-lazy> --}}
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+
+
+    <section class="pt-4 antialiased dark:bg-gray-900 md:py-0">
+        <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Jasa Pilihan</h2>
+            </div>
+        </div>
+
+
+
+        <div class="product-content-box dark:bg-gray-900 antialiased">
+            <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+                    {{-- <x-splade-lazy> --}}
+                    {{-- <x-slot:placeholder> loading... </x-slot:placeholder> --}}
+                    @foreach ($service_selected as $idx => $item)
+                        @if ($loop->first)
+                            <div class="product-title-box">
+                                <div class="product-title-box-logo-jasa"></div>
+                            </div>
+                        @endif
+
+
+                        <Link href="/jasa/{{ $item->slug }}" id="{{ $idx }}-service">
+                        <div class="rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-top h-full dark:hidden" src="{{ $item->image_thumb }}"
+                                    style="width: 100%;" alt="{{ $item->name }}" />
+                                <img class="mx-auto rounded-top hidden h-full dark:block"
+                                    src="{{ $item->image_thumb }}" alt="{{ $item->name }}" />
+                            </div>
+                            @if ($item->admin_category)
+                                <div class="tag-product">{{ $item->admin_category->name }}
+                                </div>
+                            @endif
+                            <div class="pt-1 p-2" style="height: 160px;">
+                                <p
+                                    class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                    {{ $item->name }}</p>
+
+                                <div class="mt-1 flex items-center gap-2">
+
+
+                                    @if ($item->total_comments != 0)
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-yellow-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white">@php$ratings =
+                                                ($item->total_comment_star_1 * 1 +
+                                                    $item->total_comment_star_2 * 2 +
+                                                    $item->total_comment_star_3 * 3 +
+                                                    $item->total_comment_star_4 * 4 +
+                                                    $item->total_comment_star_5 * 5) /
+                                                $item->total_comments;
+                                        @endphp
+                                            {{ number_format($ratings, 1, '.', ',') }}</p>
+                                    @endif
+                                    {{-- Total komen tidak ada di migration --}}
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        ({{ $item->total_comments }} Review)</p>
+                                </div>
+                                <div class="mt-1 flex items-center justify-between gap-4">
+                                    <p class="text-md leading-tight text-gray-900 dark:text-white">
+                                        <span class="font-extrabold">Rp.
+                                            {{ number_format($item->price, 0, ',', '.') }}</span><br /><span
+                                            style="font-size: 13px"><del> Rp.
+                                                {{ number_format($item->fake_price, 0, ',', '.') }}</del>
+                                            <span style="color: red; font-size: 13px;"><b>
+                                                    ({{ round(100 - ($item->price / $item->fake_price) * 100) }}%)</b></span></span>
+                                    </p>
+                                </div>
+                                @foreach ($item->work_units as $work_unit)
+                                    <span
+                                        class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                        style="white-space: nowrap;">{{ $work_unit->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                        </Link>
+                    @endforeach
+                    {{--
+                </x-splade-lazy> --}}
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+
+
+    <section class="pt-4 antialiased dark:bg-gray-900 md:py-0">
+        <div class="rounded-lg mb-6 p-6 bg-white dark:bg-gray-900 antialiased">
+            <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+                <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Partner Pilihan
+                        </h2>
+                    </div>
+                </div>
+                <div class="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-8"
+                    style="grid-template-columns: repeat(8, minmax(0, 1fr));">
+                    {{-- <x-splade-lazy> --}}
+                    {{-- <x-slot:placeholder> loading... </x-slot:placeholder> --}}
+                    @foreach ($partner_selected as $idx => $item)
+                        <Link href="/partner/{{ $item->slug }}">
+                        <div class="rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-full h-full dark:hidden"
+                                    src="/storage/{{ $item->profile_photo_path }}"
+                                    style="width: 100%; background: #e1e1e1" alt="{{ $item->name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                                <img class="mx-auto rounded-full hidden h-full dark:block"
+                                    src="/storage/{{ $item->profile_photo_path }}" alt="{{ $item->name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                            </div>
+                            <div class="pt-1">
+                                <p
+                                    class="text-md text-center font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                    {{ $item->name }}</p>
+                            </div>
+                        </div>
+                        </Link>
+                    @endforeach
+                    {{--
+                    </x-splade-lazy> --}}
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="pt-4 antialiased dark:bg-gray-900 md:py-0">
+        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+            <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Produk</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <Link href="/search?type=produk"><button type="button"
+                        class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto">
+                        Lihat produk selengkapnya
+                    </button></Link>
+                </div>
+            </div>
+            <div class="mb-4 grid gap-4 grid-cols-2 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-6">
+                <x-splade-lazy>
+                    <x-slot:placeholder> loading... </x-slot:placeholder>
+                    @foreach ($products as $idx => $item)
+                        <Link href="/produk/{{ $item->slug }}" id="{{ $idx }}-product">
+                        <div class="rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-top h-full dark:hidden" src="{{ $item->image_thumb }}"
+                                    style="width: 100%;" alt="{{ $item->name }}" />
+                                <img class="mx-auto rounded-top hidden h-full dark:block"
+                                    src="{{ $item->image_thumb }}" alt="{{ $item->name }}" />
+                            </div>
+                            <div style="height: 160px;">
+                                @if ($item->admin_category)
+                                    <div class="tag-product">{{ $item->admin_category->name }}
+                                    </div>
+                                @endif
+
+                                <div class="pt-1 p-2">
+                                    <p
+                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                        {{ $item->name }}</p>
+
+                                    <div class="mt-1 flex items-center gap-2">
+
+
+                                        @if ($item->total_comments != 0)
+                                            <div class="flex items-center">
+                                                <svg class="h-4 w-4 text-yellow-400" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 22 20">
+                                                    <path
+                                                        d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                                @php$ratings =
+                                                        ($item->total_comment_star_1 * 1 +
+                                                            $item->total_comment_star_2 * 2 +
+                                                            $item->total_comment_star_3 * 3 +
+                                                            $item->total_comment_star_4 * 4 +
+                                                            $item->total_comment_star_5 * 5) /
+                                                        $item->total_comments;
+                                                @endphp
+                                                {{ number_format($ratings, 1, '.', ',') }}</p>
+                                        @endif
+                                        {{-- Total komen tidak ada di migration --}}
+                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            ({{ $item->total_comments }} Review)</p>
+                                    </div>
+                                    <div class="mt-1 flex items-center justify-between gap-4">
+                                        <p class="text-md leading-tight text-gray-900 dark:text-white">
+                                            <span class="font-extrabold">Rp.
+                                                {{ number_format($item->price, 0, ',', '.') }}</span><br /><span
+                                                style="font-size: 13px"><del> Rp.
+                                                    {{ number_format($item->fake_price, 0, ',', '.') }}</del>
+                                                <span style="color: red; font-size: 13px;"><b>
+                                                        ({{ round(100 - ($item->price / $item->fake_price) * 100) }}%)</b></span></span>
+                                        </p>
+                                    </div>
+                                    @foreach ($item->work_units as $work_unit)
+                                        <span
+                                            class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">{{ $work_unit->name }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        </Link>
+                    @endforeach
+                </x-splade-lazy>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="pt-0 pb-4 antialiased dark:bg-gray-900 md:pb-4">
+        <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+            <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Jasa</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <Link href="/search?type=jasa"><button type="button"
+                        class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto">
+                        Lihat jasa selengkapnya
+                    </button></Link>
+                </div>
+            </div>
+            <div class="mb-4 grid gap-4 grid-cols-2 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-6">
+                <x-splade-lazy>
+                    <x-slot:placeholder> loading... </x-slot:placeholder>
+                    @foreach ($services as $idx => $item)
+                        <Link href="/jasa/{{ $item->slug }}" id="{{ $idx }}-service">
+                        <div class="rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800"
+                            style="height : 380px;">
+                            <div class=" w-full">
+                                <img class="mx-auto rounded-top h-full dark:hidden" src="{{ $item->image_thumb }}"
+                                    alt="{{ $item->name }}" />
+                                <img class="mx-auto rounded-top hidden h-full dark:block"
+                                    src="{{ $item->image_thumb }}" alt="{{ $item->name }}" />
+                            </div>
+                            @if ($item->admin_category)
+                                <div class="tag-product">{{ $item->admin_category->name }}
+                                </div>
+                            @endif
+                            <div class="pt-1 p-2">
+                                <p
+                                    class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                    {{ $item->name }}</p>
+
+                                <div class="mt-1 flex items-center gap-2">
+
+                                    @if ($item->total_comments != 0)
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-yellow-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 22 20">
+                                                <path
+                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-white">@php$ratings =
+                                                ($item->total_comment_star_1 * 1 +
+                                                    $item->total_comment_star_2 * 2 +
+                                                    $item->total_comment_star_3 * 3 +
+                                                    $item->total_comment_star_4 * 4 +
+                                                    $item->total_comment_star_5 * 5) /
+                                                $item->total_comments;
+                                        @endphp
+                                            {{ number_format($ratings, 1, '.', ',') }}</p>
+                                    @endif
+                                    {{-- Total komen tidak ada di migration --}}
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        ({{ $item->total_comments }} Review)</p>
+                                </div>
+                                <div class="mt-1 flex items-center justify-between gap-4">
+                                    <p class="text-md leading-tight text-gray-900 dark:text-white">
+                                        <span class="font-extrabold">Rp.
+                                            {{ number_format($item->price, 0, ',', '.') }}</span><br /><span
+                                            style="font-size: 13px"><del> Rp.
+                                                {{ number_format($item->fake_price, 0, ',', '.') }}</del>
+                                            <span style="color: red; font-size: 13px;"><b>
+                                                    ({{ round(100 - ($item->price / $item->fake_price) * 100) }}%)</b></span></span>
+                                    </p>
+                                </div>
+                                @foreach ($item->work_units as $work_unit)
+                                    <span
+                                        class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                        style="white-space: nowrap;">{{ $work_unit->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+                        </Link>
+                    @endforeach
+                </x-splade-lazy>
+
+            </div>
+        </div>
+    </section>
+</x-main-layout>

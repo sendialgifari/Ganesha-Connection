@@ -1,0 +1,186 @@
+/* h2 {
+    font-size: 1px !important;
+} */
+
+.rounded-top {
+    border-radius: .375rem .375rem 0 0;
+}
+
+.scroll-container {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.scroll-menu {
+    display: inline-block;
+}
+
+
+
+.produk-pilihan-container {
+    padding: 0 0 40px 0;
+}
+
+.jasa-pilihan-container {
+    padding: 0 0 40px 0;
+}
+
+.tag-product {
+    width: 100%;
+    background: #ffa800;
+    font-size: 12px;
+    border-radius: 0 0 50px;
+    display: block;
+    padding-left: 10px;
+    background-image: url(../../images/accent-admin-category.png);
+    background-repeat: no-repeat;
+    background-size: 62px;
+    background-position-x: right;
+    text-shadow: 1px 1px 2px whitesmoke;
+    color: darkred;
+}
+
+.discount-tag {
+    position: absolute;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 3px 10px;
+    margin-top: 10px;
+    border-radius: 0 30px 30px 0;
+}
+
+.product-grid {
+    width: 150px;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
+    margin-top: 22px;
+}
+
+
+.product-title-box{
+    background-image: linear-gradient(to top, #0f5faf, #1c6cbc, #2879c8, #3286d5, #3d93e1);
+    border-radius: 10px;
+    width: 350px;
+    display: inline-block;
+    padding: 1.5rem;
+    margin-right: -100px;
+
+}
+
+.product-title-box-logo{
+    background-image: url(../../images/logo-produk-pilihan.png);
+    width: 250px;
+    height: 280px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 10%;
+}
+
+.product-title-box-logo-jasa{
+    background-image: url(../../images/logo-jasa-pilihan.png);
+    width: 250px;
+    height: 280px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 10%;
+}
+
+.pilihan-selanjutnya {
+    height: 310px;
+    background: #a6e1ec;
+    background-image: url(../../images/accent-selanjutnya.png);
+    background-repeat: no-repeat;
+    background-position: -100px 20px;
+}
+
+
+.product-content-box{
+    position: relative;
+}
+
+
+.partner-pilihan {
+    width: 100px;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+
+.home-category {
+    width: 100px;
+    display: inline-block;
+    margin: 10px 15px 0 0;
+    vertical-align: top;
+}
+
+.home-category-pic {
+    background: rgb(225, 225, 225);
+    border-radius: 50%;
+    display: inline-block;
+    width: 100%;
+}
+
+.home-category-name {
+    width: 100%;
+    font-size: 12px;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 640px) {
+
+.produk-pilihan-container {
+    background: #8bcfdc;
+    padding: 0px 15px 20px 15px;
+    height: 360px;
+}
+
+.product-title-box-logo{
+    margin-top: 10%;
+}
+
+
+.jasa-pilihan-container {
+    background: #8bcfdc;
+    padding: 0px 15px 20px 15px;
+    height: 360px;
+}
+
+
+.home-category {
+    width: 50px;
+    margin: 5px 5px 0 0;
+
+}
+
+.home-category-pic {
+        display: inline-block;
+        float: left;
+}
+
+.home-category-name {
+        display: inline-block;
+        font-size: 10px;
+}
+
+.product-title-box {
+    background-image: none;
+    margin-right: -120px;
+    margin-left: -40px;
+}
+
+.partner-pilihan {
+    width: 45px;
+}
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {...}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (max-width: 1024px) {...}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (max-width: 1280px) {...}
