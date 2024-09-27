@@ -1,8 +1,9 @@
 <x-main-layout>
 
     <x-splade-lazy>
-        <x-slot:placeholder> <img class="rounded-lg my-4" style="width: 100%; max-height: 340px; object-fit: cover;"
-                src="/images/default.png"> </x-slot:placeholder>
+        <x-slot:placeholder> 
+            <img class="rounded-lg my-4" style="width: 100%; max-height: 340px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;" /> 
+        </x-slot:placeholder>
         {{-- @if (count($sliders) === 1)
             <Carousel class="py-4">
                 <x-splade-lazy>
@@ -16,10 +17,10 @@
                 </x-splade-lazy>
             </Carousel>
         @else --}}
-        <Carousel :autoplay="5000" :wrap-around="true" class="my-4">
+        <Carousel :autoplay="5000" :wrap-around="true" class="py-4">
             @foreach ($sliders as $key => $slider)
                 <CarouselSlide key="{{ $key }}">
-                    <img class="rounded-lg" style="width: 100%; max-height: 340px; object-fit: cover;"
+                    <img class="rounded-lg" style="width: 100%; max-height: 340px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;"
                         src="{{ $slider->image }}">
                 </CarouselSlide>
             @endforeach
@@ -178,6 +179,53 @@
         </div>
     </section>
 
+    <section class="mt-4 antialiased dark:bg-gray-900 md:py-0">
+        <div class="rounded-lg mb-6 p-4 bg-white dark:bg-gray-900 antialiased">
+            <div class="mx-auto max-w-screen-xl">
+                {{-- <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Partner Pilihan
+                        </h2>
+                    </div>
+                </div> --}}
+
+                    <div class="container">
+                        @foreach ($admin_promotion_categories as $idx => $item)
+                            <Link href="/search?adm_p_cat={{ $item->id }}">
+                            <div class="partner-pilihan rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                                <div class=" w-full admin_category_tag">
+                                    <img class="mx-auto"
+                                        src="{{ $item->image }}" alt="{{ $item->name }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                                </div>
+                                <div class="pt-1">
+                                    <p
+                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px;">
+                                        {{ $item->name }}</p>
+                                </div>
+                            </div>
+                            </Link>
+                        @endforeach
+                        @foreach ($admin_categories as $idx => $item)
+                            <Link href="/search?adm_cat={{ $item->id }}">
+                            <div class="partner-pilihan rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                                <div class=" w-full admin_category_tag">
+                                    <img class="mx-auto"
+                                        src="{{ $item->image }}" alt="{{ $item->name }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
+                                </div>
+                                <div class="pt-1">
+                                    <p
+                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px;">
+                                        {{ $item->name }}</p>
+                                </div>
+                            </div>
+                            </Link>
+                        @endforeach
+                    </div>
+            </div>
+        </div>
+    </section>
 
     <div class="w-full p-4 items-center justify-between flex sm:space-y-0">
         <div>
@@ -191,7 +239,7 @@
 
         <div class="product-content-box dark:bg-gray-900 antialiased">
             <div class="mx-auto max-w-screen-xl">
-                    <div class="scroll-container">
+                    <div class="scroll-container no-scrollbar">
                         @foreach ($product_selected as $idx => $item)
                             @if ($loop->first)
                                 <div class="product-title-box scroll-menu" style="display: inline-block;">
@@ -200,28 +248,34 @@
                             @endif
                             <Link href="/produk/{{ $item->slug }}" id="{{ $idx }}-product">
                             <div class="scroll-menu rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 product-grid">
-                                <div class=" w-full">
+                                <div class=" w-full" style="position: relative;">
                                             
                                     @if ($item->fake_price != 0 && $item->fake_price != null)
                                         <div class="discount-tag hidden sm:block">
                                             <span><b>{{ round(100 - ($item->price / $item->fake_price) * 100) }}%</b></span>
                                         </div>
                                     @endif
-                                    
-                                    <img class="mx-auto rounded-top h-full dark:hidden"
-                                        src="{{ $item->image_thumb }}" style="width: 100%;"
+                                    @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag" style="bottom:0">
+                                    @endif                                    
+                                    <img class="mx-auto rounded-top h-full"
+                                        src="{{ $item->image_thumb }}" style="width: 100%; max-height: 150px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;"
                                         alt="{{ $item->name }}" />
                                     {{-- <img class="mx-auto rounded-top hidden h-full dark:block"
                                         src="{{ $item->image_thumb }}" alt="{{ $item->name }}" /> --}}
                                 </div>
-                                <div style="height: 160px;">
+                                <div style="height: 180px;">
                                     @if ($item->admin_category)
                                         <div class="tag-product">{{ $item->admin_category->name }}
                                         </div>
                                     @endif
                                     <div class="pt-1 p-2">
-                                    <p class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                    <p class="line-clamp-2 text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
                                         {{ $item->name }}</p>
+
+                                        <p
+                                    class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                    {{ $item->short_description }}</p>
 
                                     <div class="mt-1 flex items-center gap-2">
 
@@ -248,13 +302,21 @@
                                                 {{ number_format($ratings, 1, '.', ',') }}</p>
                                         @endif
                                         {{-- Total komen tidak ada di migration --}}
-                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            ({{ $item->total_comments }} Review)</p>
+                                        {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            ({{ $item->total_comments }} Review)</p> --}}
                                     </div>
                                     <div class="mt-1 flex items-center justify-between gap-4">
                                         <p class="text-md leading-tight text-gray-900 dark:text-white">
                                             <span class="font-extrabold">
+                                                @if($item->price_type == 0)
+                                                @if($item->price == 0)
+                                                Gratis
+                                                @else
                                                 Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
                                             </span>
                                             <br>
                                                 @if ($item->fake_price != 0 && $item->fake_price != null)
@@ -269,17 +331,24 @@
                                             class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                     @endforeach
+                                    @if($item->is_readystock == 0)
+                                    <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                    @endif
                                     </div>
                                 </div>
                             </div>
                             </Link>
                             @if ($loop->last)
+                            <Link href="/search?type=produk">
                             <div class="scroll-menu product-grid">
                                 <div class="pilihan-selanjutnya p-4 shadow-md rounded-lg dark:border-gray-700 dark:bg-gray-800">
                                     <div style="white-space: initial; margin-top: 130px;">Temukan Lebih Banyak Produk Pilihan</div>
                                     <div style="white-space: initial; display: block; position: relative; vertical-align: bottom; margin-top: 60px; font-size: 12px;">Lihat Selengkapnya</div>
                                 </div>
                             </div>
+                            </Link>
                             @endif
                         @endforeach
                     </div>
@@ -299,7 +368,7 @@
     <section class="jasa-pilihan-container">
         <div class="product-content-box dark:bg-gray-900 antialiased">
             <div class="mx-auto max-w-screen-xl">
-                    <div class="scroll-container">
+                    <div class="scroll-container no-scrollbar">
                         @foreach ($service_selected as $idx => $item)
                             @if ($loop->first)
                                 <div class="product-title-box  scroll-menu">
@@ -308,27 +377,34 @@
                             @endif
                             <Link href="/jasa/{{ $item->slug }}" id="{{ $idx }}-service">
                             <div class="scroll-menu rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800 product-grid">
-                                <div class=" w-full">
+                                <div class=" w-full" style="position:relative;">
                                     @if ($item->fake_price != 0 && $item->fake_price != null)
                                         <div class="discount-tag hidden sm:block">
                                             <span><b>{{ round(100 - ($item->price / $item->fake_price) * 100) }}%</b></span>
                                         </div>
                                     @endif
-                                    <img class="mx-auto rounded-top h-full dark:hidden"
-                                        src="{{ $item->image_thumb }}" style="width: 100%;"
+                                    @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" class="admin-category-promo-tag" style="bottom:0"/>
+                                    @endif
+                                    <img class="mx-auto rounded-top h-full"
+                                        src="{{ $item->image_thumb }}" style="width: 100%; max-height: 150px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;"
                                         alt="{{ $item->name }}" />
                                     {{-- <img class="mx-auto rounded-top hidden h-full dark:block"
                                         src="{{ $item->image_thumb }}" alt="{{ $item->name }}" /> --}}
                                 </div>
-                                <div style="height: 160px;">
+                                <div style="height: 180px;">
                                     @if ($item->admin_category)
                                         <div class="tag-product">{{ $item->admin_category->name }}
                                         </div>
                                     @endif
                                     <div class="pt-1 p-2" >
                                     <p
-                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
                                         {{ $item->name }}</p>
+
+                                        <p
+                                    class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                    {{ $item->short_description }}</p>
 
                                     <div class="mt-1 flex items-center gap-2">
 
@@ -355,13 +431,22 @@
                                                 {{ number_format($ratings, 1, '.', ',') }}</p>
                                         @endif
                                         {{-- Total komen tidak ada di migration --}}
-                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            ({{ $item->total_comments }} Review)</p>
+                                        {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            ({{ $item->total_comments }} Review)</p> --}}
                                     </div>
                                     <div class="mt-1 flex items-center justify-between gap-4">
                                         <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                            <span class="font-extrabold">Rp.
-                                                {{ number_format($item->price, 0, ',', '.') }}</span>
+                                            <span class="font-extrabold">
+                                                @if($item->price_type == 0)
+                                                @if($item->price == 0)
+                                                Gratis
+                                                @else
+                                                Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                            </span>
                                             <br>
                                             @if ($item->fake_price != 0 && $item->fake_price != null)
                                             <span style="font-weight: bold; font-size: 12px; color: #b2b2b2;"><del>Rp. {{ number_format($item->fake_price, 0, ',', '.') }}</del></span>
@@ -374,17 +459,25 @@
                                             class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                     @endforeach
+                                    @if($item->is_readystock == 0)
+                                    <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                    @endif
+
                                     </div>
                                 </div>
                             </div>
                             </Link>
                             @if ($loop->last)
+                            <Link href="/search?type=jasa">
                             <div class="scroll-menu product-grid">
                                 <div class="pilihan-selanjutnya p-4 shadow-md rounded-lg dark:border-gray-700 dark:bg-gray-800">
                                     <div style="white-space: initial; margin-top: 130px;">Temukan Lebih Banyak Produk Pilihan</div>
                                     <div style="white-space: initial; display: block; position: relative; vertical-align: bottom; margin-top: 60px; font-size: 12px;">Lihat Selengkapnya</div>
                                 </div>
                             </div>
+                            </Link>
                             @endif
                         @endforeach
                     </div>
@@ -467,7 +560,7 @@
                             <Link href="/partner/{{ $item->slug }}">
                             <div class="partner-pilihan rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
                                 <div class=" w-full">
-                                    <img class="mx-auto rounded-full h-full dark:hidden"
+                                    <img class="mx-auto rounded-full h-full"
                                         src="/storage/{{ $item->profile_photo_path }}"
                                         style="width: 100%; background: #e1e1e1" alt="{{ $item->name }}"
                                         onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
@@ -532,20 +625,27 @@
                                             <span><b>{{ round(100 - ($item->price / $item->fake_price) * 100) }}%</b></span>
                                         </div>
                                 @endif
-                                <img class="mx-auto rounded-top h-full dark:hidden" src="{{ $item->image_thumb }}"
-                                    style="width: 100%;" alt="{{ $item->name }}" />
+                                <img class="mx-auto rounded-top h-full" src="{{ $item->image_thumb }}"
+                                style="width: 100%; max-height: 200px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;" alt="{{ $item->name }}" />
                                 {{-- <img class="mx-auto rounded-top hidden h-full dark:block"
                                     src="{{ $item->image_thumb }}" alt="{{ $item->name }}" /> --}}
                             </div>
-                            <div style="height: 160px;">
+                            <div style="height: 180px;">
+                                    @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag" />
+                                    @endif
                                     @if ($item->admin_category)
                                         <div class="tag-product">{{ $item->admin_category->name }}
                                         </div>
                                     @endif
                                     <div class="pt-1 p-2">
                                     <p
-                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-                                        {{ $item->name }}</p>
+                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
+                                        {{ $item->name }} </p>
+
+                                        <p
+                                    class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                    {{ $item->short_description }}</p>
 
                                     <div class="mt-1 flex items-center gap-2">
 
@@ -572,13 +672,22 @@
                                                 {{ number_format($ratings, 1, '.', ',') }}</p>
                                         @endif
                                         {{-- Total komen tidak ada di migration --}}
-                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                            ({{ $item->total_comments }} Review)</p>
+                                        {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            ({{ $item->total_comments }} Review)</p> --}}
                                     </div>
                                     <div class="mt-1 flex items-center justify-between gap-4">
                                         <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                            <span class="font-extrabold">Rp.
-                                                {{ number_format($item->price, 0, ',', '.') }}</span>
+                                            <span class="font-extrabold">
+                                                @if($item->price_type == 0)
+                                                @if($item->price == 0)
+                                                Gratis
+                                                @else
+                                                Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                            </span>
                                             @if ($item->fake_price != 0 && $item->fake_price != null)
                                             <span style="font-weight: bold; font-size: 12px; color: #b2b2b2;"><del>Rp. {{ number_format($item->fake_price, 0, ',', '.') }}</del></span>
                                             @endif
@@ -590,6 +699,12 @@
                                             class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                     @endforeach
+                                    @if($item->is_readystock == 0)
+                                    <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -638,20 +753,27 @@
                                             <span><b>{{ round(100 - ($item->price / $item->fake_price) * 100) }}%</b></span>
                                         </div>
                                 @endif
-                                <img class="mx-auto rounded-top h-full dark:hidden" src="{{ $item->image_thumb }}"
-                                    alt="{{ $item->name }}" />
+                                <img class="mx-auto rounded-top h-full" src="{{ $item->image_thumb }}"
+                                    alt="{{ $item->name }}" style="width: 100%; max-height: 200px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;" />
                                 {{-- <img class="mx-auto rounded-top hidden h-full dark:block"
                                     src="{{ $item->image_thumb }}" alt="{{ $item->name }}" /> --}}
                             </div>
-                            <div style="height : 160px">
+                            <div style="height : 180px">
+                                @if ($item->admin_promotion_category)
+                                    <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag">
+                                @endif
                                 @if ($item->admin_category)
                                     <div class="tag-product">{{ $item->admin_category->name }}
                                     </div>
                                 @endif
                                 <div class="pt-1 p-2">
                                 <p
-                                    class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                    class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
                                     {{ $item->name }}</p>
+
+                                    <p
+                                    class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                    {{ $item->short_description }}</p>
 
                                 <div class="mt-1 flex items-center gap-2">
 
@@ -677,13 +799,22 @@
                                             {{ number_format($ratings, 1, '.', ',') }}</p>
                                     @endif
                                     {{-- Total komen tidak ada di migration --}}
-                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                                        ({{ $item->total_comments }} Review)</p>
+                                    {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        ({{ $item->total_comments }} Review)</p> --}}
                                 </div>
                                 <div class="mt-1 flex items-center justify-between gap-4">
                                     <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                        <span class="font-extrabold">Rp.
-                                            {{ number_format($item->price, 0, ',', '.') }}</span>
+                                        <span class="font-extrabold">
+                                            @if($item->price_type == 0)
+                                            @if($item->price == 0)
+                                            Gratis
+                                            @else
+                                            Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                            @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                        </span>
                                         @if ($item->fake_price != 0 && $item->fake_price != null)
                                         <span style="font-weight: bold; font-size: 12px; color: #b2b2b2;"><del>Rp. {{ number_format($item->fake_price, 0, ',', '.') }}</del></span>
                                         @endif
@@ -695,6 +826,12 @@
                                         class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                         style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                 @endforeach
+                                @if($item->is_readystock == 0)
+                                    <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>

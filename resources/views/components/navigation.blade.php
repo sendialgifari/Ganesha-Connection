@@ -108,9 +108,26 @@
                             <x-nav-link :href="route('static_pages.index')" :active="request()->routeIs('static_pages.index')">
                                 {{ __('Pages') }}
                             </x-nav-link>
-                            <x-nav-link :href="route('admin_categories.index')" :active="request()->routeIs('admin_categories.index')">
+                            <x-splade-dropdown>
+                                <x-slot:trigger>
+                                    <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
+                                        :active="request()->routeIs('admin_categories.index') ||
+                                            request()->routeIs('admin_promotion_categories.index')">
+                                        {{ __('Admin Categories') }}
+                                    </x-nav-link>
+                                </x-slot>
+                                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                                    <x-dropdown-link :href="route('admin_categories.index')">
+                                        {{ __('Admin Categories 1') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('admin_promotion_categories.index')">
+                                        {{ __('Admin Categories 2') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-splade-dropdown>
+                            {{-- <x-nav-link :href="route('admin_categories.index')" :active="request()->routeIs('admin_categories.index')">
                                 {{ __('Admin Categories') }}
-                            </x-nav-link>
+                            </x-nav-link> --}}
                         @endrole
                         @role('admin')
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -403,6 +420,9 @@
                     </x-responsive-nav-link> --}}
                     <x-responsive-nav-link :href="route('admin_categories.index')" :active="request()->routeIs('admin_categories.index')">
                         {{ __('Admin Categories') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin_promotion_categories.index')" :active="request()->routeIs('admin_promotion_categories.index')">
+                        {{ __('Admin Categories 2') }}
                     </x-responsive-nav-link>
                 @endrole
                 @role('admin')

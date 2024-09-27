@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ServiceWorkUnit;
 use Illuminate\Support\Facades\Validator;
 use App\Models\AdminCategory;
+use App\Models\AdminPromotionCategory;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\ServiceImage;
@@ -91,13 +92,24 @@ class ServiceController extends Controller
     public function create()
     {
         $admin_categories = AdminCategory::pluck('name', 'id')->toArray();
+        $admin_categories[0] = "Tidak ada kategori admin";
+        $admin_promotion_categories = AdminPromotionCategory::pluck('name', 'id')->toArray();
+        $admin_promotion_categories[0] = "Tidak ada kategori admin";
         $service_categories = ServiceCategory::pluck('name', 'id')->toArray();
         $work_units = WorkUnit::pluck('name', 'id')->toArray();
         $is_selected = [
             '0' => 'No',
             '1' => 'Yes',
         ];
-        return view('services.create', compact('service_categories', 'work_units', 'is_selected', 'admin_categories'));
+        $price_type = [
+            '0' => 'Menggunakan harga',
+            '1' => 'Hubungi kami',
+        ];
+        $is_readystock = [
+            '0' => 'Pre Order',
+            '1' => 'Ready Stock',
+        ];
+        return view('services.create', compact('service_categories', 'work_units', 'is_selected', 'admin_categories', 'admin_promotion_categories', 'price_type', 'is_readystock'));
     }
 
     /**
@@ -109,51 +121,88 @@ class ServiceController extends Controller
             'service_category_id' => 'required',
             'name' => 'required|max:255|unique:services,name',
             'description' => 'required',
-            'price' => 'required|numeric',
+            // 'price' => 'required|numeric',
             'short_description' => 'required',
-            'image' => 'required|image|mimes:jpeg,jpg,png',
+            'image_real' => 'required|image|mimes:jpeg,jpg,png',
             // 'fake_price' => 'required|numeric',
             'is_selected' => 'required',
+            'price_type' => 'required|numeric',
+            'is_readystock' => 'required|numeric',
         ])->validate();
 
-        $fileName = "img-" . $request->file('image')->hashName();
-        $file = $request->file('image');
+        $fileName = "img-service-" . $request->file('image_real')->hashName();
+        $file = $request->file('image_real');
         $img = Image::read($file->getRealPath());
-        $img->cover(1000, 1000, 'center')->save(storage_path('app/public/services/' . $fileName));
+        $img->contain(700, 700, 'efefef')->toJpeg(90)->save(storage_path('app/public/services/' . $fileName));
 
-        $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
-        $file = $request->file('image');
+        $fileNameThumb = "img-thumb-" . $request->file('image_real')->hashName();
+        $file = $request->file('image_real');
         $img = Image::read($file->getRealPath());
-        $img->cover(200, 200, 'center')->save(storage_path('app/public/services/' . $fileNameThumb));
+        $img->cover(200, 200, 'center')->toJpeg(90)->save(storage_path('app/public/services/' . $fileNameThumb));
+
+        $fileNameReal = "img-real-" . $request->file('image_real')->hashName();
+        $file = $request->file('image_real');
+        $img = Image::read($file->getRealPath());
+        $img->save(storage_path('app/public/services/' . $fileNameReal));
 
         $slug = str_replace(array(" ", ".", ",", "'", '"', "?", "!", ":", "/"), array("-", "-", "", "", "", "", "", "", ""), strtolower($request->name));
 
+        $price = $request->price;
+        if($request->price_type == 1){
+            $price = 0;
+        }
+        if(is_null($price)){
+            $price = 0;
+        }
+
+        $admin_category_id = $request->admin_category_id;
+        if($request->admin_category_id == 0){
+            $admin_category_id = null;
+        }
+
+        $admin_promotion_category_id = $request->admin_promotion_category_id;
+        if($request->admin_promotion_category_id == 0){
+            $admin_promotion_category_id = null;
+        }
+
+        $fake_price = $request->fake_price;
+        if($request->is_fake_price == "no"){
+            $fake_price = 0;
+        }
+
         $user = Auth::user();
         $service = Service::create([
-            'admin_category_id' => $request->admin_category_id,
+            'admin_category_id' => $admin_category_id,
+            'admin_promotion_category_id' => $admin_promotion_category_id,
             'service_category_id' => $request->service_category_id,
             'name' => $request->name,
             'user_id' => $user->id,
             'description' => $request->description,
-            'price' => $request->price,
+            'price' => $price,
             'short_description' => $request->short_description,
             'image' => '/storage/services/' . $fileName,
             'image_thumb' => '/storage/services/' . $fileNameThumb,
-            'fake_price' => $request->fake_price,
+            'image_real' => '/storage/services/' . $fileNameReal,
+            'fake_price' => $fake_price,
+            'price_type' => $request->price_type,
             'is_selected' => $request->is_selected,
+            'is_readystock' => $request->is_readystock,
             'slug' => $slug,
+            'external_link' => $request->external_link,
         ]);
 
-        foreach ($request->images as $value) {
-            $fileName = "img-" . $value->hashName();
-            $file = $value;
-            $img = Image::read($file->getRealPath());
-            $img->cover(1000, 1000, 'center')->save(storage_path('app/public/services/' . $fileName));
+        if($request->images){
+            foreach ($request->images as $value) {
+                $fileName = "img-service-" . $value->hashName();
+                $file = $value;
+                $img = Image::read($file->getRealPath());
+                $img->cover(700, 700, 'center')->toJpeg(90)->save(storage_path('app/public/services/' . $fileName));
 
-            ServiceImage::create([
-                'service_id' => $service->id,
-                'image' => '/storage/services/' . $fileName,
-            ]);
+                ServiceImage::create([
+                    'service_id' => $service->id,
+                    'image' => '/storage/services/' . $fileName,
+                ]);
+            }
         }
 
         $service->work_units()->attach($request->work_units);
@@ -178,6 +227,9 @@ class ServiceController extends Controller
     {
         $service->images = array_column($service->images->toArray(), 'image');
         $admin_categories = AdminCategory::pluck('name', 'id')->toArray();
+        $admin_categories[0] = "Tidak ada kategori admin";
+        $admin_promotion_categories = AdminPromotionCategory::pluck('name', 'id')->toArray();
+        $admin_promotion_categories[0] = "Tidak ada kategori admin";
         $service_categories = ServiceCategory::pluck('name', 'id')->toArray();
         $work_units = WorkUnit::pluck('name', 'id')->toArray();
         return view('services.edit', [
@@ -188,7 +240,16 @@ class ServiceController extends Controller
                 '0' => 'No',
                 '1' => 'Yes',
             ],
+            'price_type' => [
+                '0' => 'Menggunakan harga',
+                '1' => 'Hubungi kami',
+            ],
+            'is_readystock' => [
+                '0' => 'Pre Order',
+                '1' => 'Ready Stock',
+            ],
             'admin_categories' => $admin_categories,
+            'admin_promotion_categories' => $admin_promotion_categories,
         ]);
     }
 
@@ -201,39 +262,52 @@ class ServiceController extends Controller
             'service_category_id' => 'required',
             'name' => 'required|max:255',
             'description' => 'required',
-            'price' => 'required|numeric',
+            // 'price' => 'required|numeric',
             'short_description' => 'required',
-            'image' => 'required|image|mimes:jpeg,jpg,png',
+            'image_real' => 'required|image|mimes:jpeg,jpg,png',
             // 'fake_price' => 'required|numeric',
             // 'is_selected' => 'required',
+            'price_type' => 'required|numeric',
+            'is_readystock' => 'required|numeric',
         ])->validate();
 
-        if ($request->file('image')) {
+        if ($request->file('image_real')) {
 
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
+            try {
+                unlink($dirname);
+            } catch (\Throwable $th) {
+            }
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_real);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
 
-            $fileName = "img-" . $request->file('image')->hashName();
-            $file = $request->file('image');
+            $fileName = "img-service-" . $request->file('image_real')->hashName();
+            $file = $request->file('image_real');
             $img = Image::read($file->getRealPath());
-            $img->cover(1000, 1000, 'center')->save(storage_path('app/public/services/' . $fileName));
+            $img->contain(700, 700, 'efefef')->toJpeg(90)->save(storage_path('app/public/services/' . $fileName));
 
-            $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
-            $file = $request->file('image');
+            $fileNameThumb = "img-thumb-" . $request->file('image_real')->hashName();
+            $file = $request->file('image_real');
             $img = Image::read($file->getRealPath());
-            $img->cover(200, 200, 'center')->save(storage_path('app/public/services/' . $fileNameThumb));
+            $img->cover(200, 200, 'center')->toJpeg(90)->save(storage_path('app/public/services/' . $fileNameThumb));
+
+            $fileNameReal = "img-real-" . $request->file('image_real')->hashName();
+            $file = $request->file('image_real');
+            $img = Image::read($file->getRealPath());
+            $img->save(storage_path('app/public/services/' . $fileNameReal));
 
             $service->update([
                 'image' => '/storage/services/' . $fileName,
                 'image_thumb' => '/storage/services/' . $fileNameThumb,
+                'image_real' => '/storage/services/' . $fileNameReal,
             ]);
         }
 
@@ -245,22 +319,49 @@ class ServiceController extends Controller
             $is_selected = $service->is_selected;
         }
 
+        $price = $request->price;
+        if($request->price_type == 1){
+            $price = 0;
+        }
+        if(is_null($price)){
+            $price = 0;
+        }
+
+        $admin_category_id = $request->admin_category_id;
+        if($request->admin_category_id == 0){
+            $admin_category_id = null;
+        }
+
+        $admin_promotion_category_id = $request->admin_promotion_category_id;
+        if($request->admin_promotion_category_id == 0){
+            $admin_promotion_category_id = null;
+        }
+
+        $fake_price = $request->fake_price;
+        if($request->is_fake_price == "no"){
+            $fake_price = 0;
+        }
+
         $service->update([
-            'admin_category_id' => $request->admin_category_id,
+            'admin_category_id' => $admin_category_id,
+            'admin_promotion_category_id' => $admin_promotion_category_id,
             'service_category_id' => $request->service_category_id,
             'name' => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
+            'price' => $price,
             'short_description' => $request->short_description,
-            'fake_price' => $request->fake_price,
+            'fake_price' => $fake_price,
+            'price_type' => $request->price_type,
             'is_selected' => $is_selected,
+            'is_readystock' => $request->is_readystock,
             'slug' => $slug,
+            'external_link' => $request->external_link,
         ]);
         $service->work_units()->sync($request->work_units);
 
         $service_images = ServiceImage::where('service_id', $service->id)->get();
         foreach ($service_images as $key => $value) {
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -269,16 +370,18 @@ class ServiceController extends Controller
 
         ServiceImage::where('service_id', $service->id)->delete();
         
-        foreach ($request->images as $value) {
-            $fileName = "img-" . $value->hashName();
-            $file = $value;
-            $img = Image::read($file->getRealPath());
-            $img->cover(1000, 1000, 'center')->save(storage_path('app/public/services/' . $fileName));
+        if($request->images){
+            foreach ($request->images as $value) {
+                $fileName = "img-service-" . $value->hashName();
+                $file = $value;
+                $img = Image::read($file->getRealPath());
+                $img->cover(700, 700, 'center')->toJpeg(90)->save(storage_path('app/public/services/' . $fileName));
 
-            ServiceImage::create([
-                'service_id' => $service->id,
-                'image' => '/storage/services/' . $fileName,
-            ]);
+                ServiceImage::create([
+                    'service_id' => $service->id,
+                    'image' => '/storage/services/' . $fileName,
+                ]);
+            }
         }
 
         Toast::title('Service was updated!')->autoDismiss(5);
@@ -292,12 +395,17 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         $service->service_comments()->delete();
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {
         }
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
+        try {
+            unlink($dirname);
+        } catch (\Throwable $th) {
+        }
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_real);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {
@@ -305,7 +413,7 @@ class ServiceController extends Controller
 
         $service_images = ServiceImage::where('service_id', $service->id)->get();
         foreach ($service_images as $key => $value) {
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {

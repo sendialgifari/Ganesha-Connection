@@ -65,7 +65,8 @@ class SliderController extends Controller
         $fileName = "img-" . $request->file('image')->hashName();
         $file = $request->file('image');
         $img = Image::read($file->getRealPath());
-        $img->scaleDown(width: 1280)->save(storage_path('app/public/sliders/' . $fileName));
+        // $img->scaleDown(width: 1280)->save(storage_path('app/public/sliders/' . $fileName));
+        $img->toJpeg(50)->save(storage_path('app/public/sliders/' . $fileName));
 
         $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
         $file = $request->file('image');
@@ -116,12 +117,12 @@ class SliderController extends Controller
 
         if ($request->file('image')) {
 
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image_thumb);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -130,7 +131,8 @@ class SliderController extends Controller
             $fileName = "img-" . $request->file('image')->hashName();
             $file = $request->file('image');
             $img = Image::read($file->getRealPath());
-            $img->scaleDown(width: 1280)->save(storage_path('app/public/sliders/' . $fileName));
+            // $img->scaleDown(width: 1280)->save(storage_path('app/public/sliders/' . $fileName));
+            $img->toJpeg(50)->save(storage_path('app/public/sliders/' . $fileName));
 
             $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
             $file = $request->file('image');
@@ -160,12 +162,12 @@ class SliderController extends Controller
      */
     public function destroy(Slider $slider)
     {
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {
         }
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image_thumb);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/sliders/' . str_replace('/storage/sliders/', '', $slider->image_thumb);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {

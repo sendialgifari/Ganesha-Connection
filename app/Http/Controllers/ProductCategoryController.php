@@ -130,7 +130,7 @@ class ProductCategoryController extends Controller
 
         if ($request->file('image')) {
 
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/product_categories/' . str_replace('/storage/product_categories/', '', $product_category->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/product_categories/' . str_replace('/storage/product_categories/', '', $product_category->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -165,12 +165,12 @@ class ProductCategoryController extends Controller
         $products = Product::where('product_category_id', $product_category->id)->get();
         foreach ($products as $product) {
             $product->product_comments()->delete();
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -178,7 +178,7 @@ class ProductCategoryController extends Controller
 
             $product_images = ProductImage::where('product_id', $product->id)->get();
             foreach ($product_images as $key => $value) {
-                $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
+                $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
                 try {
                     unlink($dirname);
                 } catch (\Throwable $th) {
@@ -191,7 +191,7 @@ class ProductCategoryController extends Controller
             $product->delete();
         }
         $product_category->products()->delete();
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/product_categories/' . str_replace('/storage/product_categories/', '', $product_category->image);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/product_categories/' . str_replace('/storage/product_categories/', '', $product_category->image);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {

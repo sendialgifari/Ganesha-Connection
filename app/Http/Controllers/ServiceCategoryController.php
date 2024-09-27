@@ -130,7 +130,7 @@ class ServiceCategoryController extends Controller
 
         if ($request->file('image')) {
 
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/service_categories/' . str_replace('/storage/service_categories/', '', $service_category->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/service_categories/' . str_replace('/storage/service_categories/', '', $service_category->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -165,12 +165,12 @@ class ServiceCategoryController extends Controller
         $services = Service::where('service_category_id', $service_category->id)->get();
         foreach ($services as $service) {
             $service->service_comments()->delete();
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -178,7 +178,7 @@ class ServiceCategoryController extends Controller
 
             $service_images = ServiceImage::where('service_id', $service->id)->get();
             foreach ($service_images as $key => $value) {
-                $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
+                $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
                 try {
                     unlink($dirname);
                 } catch (\Throwable $th) {
@@ -191,7 +191,7 @@ class ServiceCategoryController extends Controller
             $service->delete();
         }
         $service_category->services()->delete();
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/service_categories/' . str_replace('/storage/service_categories/', '', $service_category->image);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/service_categories/' . str_replace('/storage/service_categories/', '', $service_category->image);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {

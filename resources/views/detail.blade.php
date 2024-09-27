@@ -64,33 +64,44 @@
 
                         <x-splade-toggle :data="$images_data">
                             @foreach ($images as $key => $image)
-                                <img class="w-full rounded-lg dark:hidden" src="{{ $image['image'] }}"
-                                    v-if="{{$image['section']}}" />
+                                <img class="w-full rounded-lg" src="{{ $image['image'] }}"
+                                    v-if="{{$image['section']}}" style="width: 100vw; max-height: 512px;height: calc(100vw - 11vw); object-fit: cover; background-color: #c6c6c6;" />
                             @endforeach
                             @if(count($images) > 1)
                                 @foreach ($images as $key => $image)
                                     <button @click.prevent="{{$image['click']}}" class="mt-2 mr-2"><img
                                             style="width: 70px; height: 70px; object-fit: cover;"
-                                            class="w-full rounded-lg dark:hidden" src="{{ $image['image'] }}" /></button>
+                                            class="w-full rounded-lg" src="{{ $image['image'] }}" /></button>
                                 @endforeach
                             @endif
                         </x-splade-toggle>
 
 
                     @else
-                        <img class="w-full rounded-full dark:hidden" src="{{ $detail_data->profile_photo_url }}"
+                        <img class="w-full rounded-full" src="{{ $detail_data->profile_photo_url }}"
                             alt="{{$detail_data->name}}" style="width: 200px; height: 200px; object-fit: cover;" />
-                        <img class="w-full rounded-full hidden dark:block" src="{{ $detail_data->profile_photo_url }}"
-                            alt="{{$detail_data->name}}" style="width: 200px; height: 200px; object-fit: cover;" />
+                        {{-- <img class="w-full rounded-full hidden dark:block" src="{{ $detail_data->profile_photo_url }}"
+                            alt="{{$detail_data->name}}" style="width: 200px; height: 200px; object-fit: cover;" /> --}}
                     @endif
                 </div>
 
                 <div class="mt-6 sm:mt-8 lg:mt-0">
+                    @if ($type !== 'partner')
+                    @if ($detail_data->admin_promotion_category)
+                        <img src="{{ $detail_data->admin_promotion_category->image }}" class="mb-2" style="height: 35px;"/>
+                    @endif
+                        @if($detail_data->admin_category_id)
+                        <div class="admin-category-detail shadow-sm">
+                        Produk {{ $detail_data->admin_category->name }}
+                        </div>
+                        @endif
+                    @endif
+                    
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
                         {{ $detail_data->name }}
                     </h1>
-                    @if ($type !== 'partner')
-                    <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                    <!--@if ($type !== 'partner')
+                     <div class="flex items-center gap-2 mt-2 sm:mt-0">
                         @if ($detail_data->total_comments != 0)
                             <div class="flex items-center gap-1">
                                 <div class="ratings">
@@ -112,13 +123,23 @@
                         </Link>
                     </div>
                     @endif
+                    -->
                     <div class="mt-4 mb-1 sm:items-center sm:gap-4 sm:flex">
                         @if ($type !== 'partner')
                         @if ($detail_data->fake_price != 0 && $detail_data->fake_price != null)<span class="text-sm font-medium"><del>Rp.
                                     {{ number_format($detail_data->fake_price, 0, ',', '.') }}</del></span>@endif
-                            <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
-                                Rp. {{ number_format($detail_data->price, 0, ',', '.') }}
-                            </p>
+                            
+                                @if($detail_data->price_type == 0)
+                                <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
+                                    Rp. {{ number_format($detail_data->price, 0, ',', '.') }}
+                                </p>
+                                @else
+                                <p class="text-md font-extrabold text-gray-900 dark:text-white">
+                                    Hubungi kami untuk harga terbaik
+                                </p>
+                                @endif
+                                
+                            
                             @if ($detail_data->fake_price != 0 && $detail_data->fake_price != null)
                             <span
                                 class="ml-1 bg-red-500 text-white text-xs font-medium me-2 px-1 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{{ round(100 - ($detail_data->price / $detail_data->fake_price) * 100) }}%</span>@endif
@@ -136,13 +157,10 @@
                             @endforeach
                         </div>
                         @endif
-                    @endif
-                    @if ($type !== 'partner')
-                        @if($detail_data->admin_category_id)
-                        <span>Kategori Admin : </span>
+                        @if($detail_data->is_readystock == 0)
                         <span
-                                    class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-                                    style="white-space: nowrap;">{{ $detail_data->admin_category->name }}</span>
+                                class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                style="white-space: nowrap;">Preorder</span>
                         @endif
                     @endif
 
@@ -167,6 +185,11 @@
                                     class="bg-red-500 flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white focus:outline-none rounded-lg border border-gray-200 hover:bg-red-500 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     target="_blank" style="background-color: #c5221e;"><i class="fab fa-google"></i> Chat
                                     via Email</a>
+                                @if ($detail_data->external_link)
+                                <a href="{{$detail_data->external_link}}"
+                                    class="bg-red-500 flex items-center justify-center py-2.5 px-5 text-sm font-medium text-white focus:outline-none rounded-lg border border-gray-200 hover:bg-red-500 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                    target="_blank" style="background-color: #0022fd;"><i class="fab fa-google"></i> External Link</a>
+                                @endif
                             @else
                                 @if ($detail_data->phone_number)
                                     <a target="_blank"
@@ -285,14 +308,16 @@
                                     d="M29.897,18.196c-0.169-0.22-0.481-0.26-0.701-0.093L16,26c0,0,2.106,5.892,2.427,6.912 c0.322,1.021,0.58,1.045,0.58,1.045l0.964-5.965l9.832-9.096C30.023,18.729,30.064,18.416,29.897,18.196z">
                                 </path>
                             </svg></a>
-                        <a href="https://pinterest.com/pin/create/button/?url={{ Request::fullUrl() }}&description={{ $detail_data->name }}. {{ $detail_data->name }}"
+                        {{-- <a href="https://pinterest.com/pin/create/button/?url={{ Request::fullUrl() }}&description={{ $detail_data->name }}. {{ $detail_data->name }}"
                             target="_blank" style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" x="0px"
                                 y="0px" width="30" height="30" viewBox="0 0 48 48">
                                 <circle cx="24" cy="24" r="20" fill="#E60023"></circle>
                                 <path fill="#FFF"
                                     d="M24.4439087,11.4161377c-8.6323242,0-13.2153931,5.7946167-13.2153931,12.1030884	c0,2.9338379,1.5615234,6.5853882,4.0599976,7.7484131c0.378418,0.1762085,0.581543,0.1000366,0.668457-0.2669067	c0.0668945-0.2784424,0.4038086-1.6369019,0.5553589-2.2684326c0.0484619-0.2015381,0.0246582-0.3746338-0.1384277-0.5731201	c-0.8269653-1.0030518-1.4884644-2.8461304-1.4884644-4.5645752c0-4.4115601,3.3399658-8.6799927,9.0299683-8.6799927	c4.9130859,0,8.3530884,3.3484497,8.3530884,8.1369019c0,5.4099731-2.7322998,9.1584473-6.2869263,9.1584473	c-1.9630737,0-3.4330444-1.6238403-2.9615479-3.6153564c0.5654297-2.3769531,1.6569214-4.9415283,1.6569214-6.6584473	c0-1.5354004-0.8230591-2.8169556-2.5299683-2.8169556c-2.006958,0-3.6184692,2.0753784-3.6184692,4.8569336	c0,1.7700195,0.5984497,2.9684448,0.5984497,2.9684448s-1.9822998,8.3815308-2.3453979,9.9415283	c-0.4019775,1.72229-0.2453003,4.1416016-0.0713501,5.7233887l0,0c0.4511108,0.1768799,0.9024048,0.3537598,1.3687744,0.4981079l0,0	c0.8168945-1.3278198,2.0349731-3.5056763,2.4864502-5.2422485c0.2438354-0.9361572,1.2468872-4.7546387,1.2468872-4.7546387	c0.6515503,1.2438965,2.5561523,2.296936,4.5831299,2.296936c6.0314941,0,10.378418-5.546936,10.378418-12.4400024	C36.7738647,16.3591919,31.3823242,11.4161377,24.4439087,11.4161377z">
                                 </path>
-                            </svg></a>
+                            </svg></a> --}}
+                            <button class="w-5" @click="$splade.copy()"><img width="50" height="50" src="https://img.icons8.com/ios-filled/50/link--v1.png" alt="link--v1"/></button>
+                            <p id="success-copy" style="font-size: 12px; color: green; font-weight: bold;">Salin Berhasil</p>
                     </div>
 
                     <hr class="mt-4 mb-4 border-gray-200 dark:border-gray-800" />
@@ -325,6 +350,7 @@
             </div>
         </section>
 
+        <!--
         @auth
             <section class="rounded-lg bg-white py-2 antialiased dark:bg-gray-900 md:py-2" style="padding: 25px 45px;">
                 <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -573,6 +599,7 @@
 
             </div>
         </section>
+        -->
 
         @if (count($related) != 0)
             <section class="mt-4 pb-2 antialiased dark:bg-gray-900">
@@ -609,15 +636,21 @@
                                         <img class="rounded-top mx-auto hidden h-full dark:block" src="{{ $item->image_thumb }}"
                                             alt="{{ $item->name }}" />
                                     </div>
-                                    <div  style="height: 160px;">
+                                    <div  style="height: 180px;">
+                                        @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" style="height: 35px;position: absolute;margin-top: -40px;margin-left: 5px;"/>
+                                    @endif
                                         @if($item->admin_category)
                                             <div class="tag-product">{{$item->admin_category->name}}
                                             </div>
                                         @endif
                                         <div class="pt-1 p-2">
+                                        <p class="line-clamp-2 text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
+                                        {{ $item->name }}</p>
+
                                         <p
-                                            class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-                                            {{ $item->name }}
+                                            class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                            {{ $item->short_description }}
                                         </p>
 
                                         <div class="mt-1 flex items-center gap-2">
@@ -637,14 +670,23 @@
                                                 </p>
                                             @endif
                                             {{-- Total komen tidak ada di migration --}}
-                                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                                 ({{ $item->total_comments }} Review)
-                                            </p>
+                                            </p> --}}
                                         </div>
                                         <div class="mt-1 flex items-center justify-between gap-4">
                                             <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                                <span class="font-extrabold">Rp.
-                                                    {{ number_format($item->price, 0, ',', '.') }}</span>
+                                                <span class="font-extrabold">
+                                                    @if($item->price_type == 0)
+                                                    @if($item->price == 0)
+                                                Gratis
+                                                @else
+                                                Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                @endif
+                                                    @else
+                                                    Hubungi kami
+                                                    @endif
+                                                </span>
                                                     @if ($item->fake_price != 0 && $item->fake_price != null)<span
                                                     style="font-size: 13px"><del> Rp.
                                                         {{ number_format($item->fake_price, 0, ',', '.') }}</del>
@@ -658,6 +700,11 @@
                                                 class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
                                                 style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                         @endforeach
+                                        @if($item->is_readystock == 0)
+                                            <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
@@ -707,15 +754,20 @@
                                             alt="{{ $item->name }}" />
                                     </div>
                                     
-                                    <div  style="height: 160px;">
+                                    <div  style="height: 180px;">
+                                        @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" style="height: 35px;position: absolute;margin-top: -40px;margin-left: 5px;"/>
+                                    @endif
                                         @if($item->admin_category)
                                             <div class="tag-product">{{$item->admin_category->name}}
                                             </div>
                                         @endif
                                         <div class="pt-1 p-2">
+                                        <p class="line-clamp-2 text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">{{ $item->name }}</p>
+
                                         <p
-                                            class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-                                            {{ $item->name }}
+                                            class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                            {{ $item->short_description }}
                                         </p>
 
                                         <div class="mt-1 flex items-center gap-2">
@@ -735,14 +787,23 @@
                                                 </p>
                                             @endif
                                             {{-- Total komen tidak ada di migration --}}
-                                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                                 ({{ $item->total_comments }} Review)
-                                            </p>
+                                            </p> --}}
                                         </div>
                                         <div class="mt-1 flex items-center justify-between gap-4">
                                             <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                                <span class="font-extrabold">Rp.
-                                                    {{ number_format($item->price, 0, ',', '.') }}</span><br />
+                                                <span class="font-extrabold">
+                                                    @if($item->price_type == 0)
+                                                    @if($item->price == 0)
+                                                    Gratis
+                                                    @else
+                                                    Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                    @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                                </span><br />
                                                     @if ($item->fake_price != 0 && $item->fake_price != null)<span
                                                     style="font-size: 13px"><del> Rp.
                                                         {{ number_format($item->fake_price, 0, ',', '.') }}</del>
@@ -756,8 +817,13 @@
                                         @foreach ($item->work_units as $work_unit)
                                             <span
                                                 class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-                                                style="white-space: nowrap;">{{ $work_unit->name }}</span><br />
+                                                style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                         @endforeach
+                                        @if($item->is_readystock == 0)
+                                            <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
@@ -799,14 +865,20 @@
                                         <img class="mx-auto hidden h-full dark:block" src="{{ $item->image_thumb }}"
                                             alt="{{ $item->name }}" />
                                     </div>
+                                    @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" style="height: 35px;position: absolute;margin-top: -40px;margin-left: 5px;"/>
+                                    @endif
                                     @if($item->admin_category)
                             <div class="tag-product">{{$item->admin_category->name}}
                             </div>
                             @endif
                                     <div class="pt-1 p-2">
+                                        <p class="line-clamp-2 text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
+                                        {{ $item->name }}</p>
+
                                         <p
-                                            class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-                                            {{ $item->name }}
+                                            class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                            {{ $item->short_description }}
                                         </p>
 
                                         <div class="mt-1 flex items-center gap-2">
@@ -826,14 +898,23 @@
                                                 </p>
                                             @endif
                                             {{-- Total komen tidak ada di migration --}}
-                                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                                 ({{ $item->total_comments }} Review)
-                                            </p>
+                                            </p> --}}
                                         </div>
                                         <div class="mt-1 flex items-center justify-between gap-4">
                                             <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                                <span class="font-extrabold">Rp.
-                                                    {{ number_format($item->price, 0, ',', '.') }}</span><br />
+                                                <span class="font-extrabold">
+                                                    @if($item->price_type == 0)
+                                                    @if($item->price == 0)
+                                                    Gratis
+                                                    @else
+                                                    Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                    @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                                </span><br />
                                                     @if ($item->fake_price != 0 && $item->fake_price != null)<span
                                                     style="font-size: 13px"><del> Rp.
                                                         {{ number_format($item->fake_price, 0, ',', '.') }}</del>
@@ -847,7 +928,7 @@
                                         @foreach ($item->work_units as $work_unit)
                                             <span
                                                 class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-                                                style="white-space: nowrap;">{{ $work_unit->name }}</span><br />
+                                                style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                         @endforeach
                                     </div>
                                 </div>
@@ -890,14 +971,20 @@
                                         <img class="mx-auto hidden h-full dark:block" src="{{ $item->image_thumb }}"
                                             alt="{{ $item->name }}" />
                                     </div>
+                                    @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" style="height: 35px;position: absolute;margin-top: -40px;margin-left: 5px;"/>
+                                    @endif
                                     @if($item->admin_category)
                             <div class="tag-product">{{$item->admin_category->name}}
                             </div>
                             @endif
                                     <div class="pt-1">
+                                        <p class="line-clamp-2 text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
+                                        {{ $item->name }}</p>
+
                                         <p
-                                            class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-                                            {{ $item->name }}
+                                            class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                            {{ $item->short_description }}
                                         </p>
 
                                         <div class="mt-1 flex items-center gap-2">
@@ -917,14 +1004,23 @@
                                                 </p>
                                             @endif
                                             {{-- Total komen tidak ada di migration --}}
-                                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                            {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                                 ({{ $item->total_comments }} Review)
-                                            </p>
+                                            </p> --}}
                                         </div>
                                         <div class="mt-1 flex items-center justify-between gap-4">
                                             <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                                <span class="font-extrabold">Rp.
-                                                    {{ number_format($item->price, 0, ',', '.') }}</span><br />
+                                                <span class="font-extrabold">
+                                                    @if($item->price_type == 0)
+                                                    @if($item->price == 0)
+                                                    Gratis
+                                                    @else
+                                                    Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                    @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                            </span><br />
                                                     @if ($item->fake_price != 0 && $item->fake_price != null)<span
                                                     style="font-size: 13px"><del> Rp.
                                                         {{ number_format($item->fake_price, 0, ',', '.') }}</del>
@@ -938,7 +1034,7 @@
                                         @foreach ($item->work_units as $work_unit)
                                             <span
                                                 class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-                                                style="white-space: nowrap;">{{ $work_unit->name }}</span><br />
+                                                style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                         @endforeach
                                     </div>
                                 </div>
@@ -952,6 +1048,14 @@
             </section>
         @endif
     @endif
+
+    <x-splade-script>
+        document.getElementById("success-copy").style.display = "none";
+        $splade.copy = function () {
+            navigator.clipboard.writeText('{{ Request::fullUrl() }}');
+            document.getElementById("success-copy").style.display = "block";
+        };
+    </x-splade-script>
 
 
 

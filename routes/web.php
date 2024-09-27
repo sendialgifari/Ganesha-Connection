@@ -12,6 +12,7 @@ use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceCommentController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminPromotionCategoryController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductCommentController;
 use App\Http\Controllers\ProductController;
@@ -66,6 +67,7 @@ Route::middleware(['splade'])->group(function () {
             
             Route::middleware(['role:superadmin'])->group(function () {
                 Route::resource('admin_categories', AdminCategoryController::class);
+                Route::resource('admin_promotion_categories', AdminPromotionCategoryController::class);
             });
 
             Route::middleware(['role:admin|superadmin'])->group(function () {

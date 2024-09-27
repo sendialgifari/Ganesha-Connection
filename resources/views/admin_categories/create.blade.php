@@ -11,6 +11,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-splade-form class="space-y-4" action="{{ route('admin_categories.store') }}" :default="['is_selected' => '0']">
                 <x-splade-input name="name" label="Name" placeholder="Name" />
+                <x-splade-radios name="is_selected" label="Is Selected" :options="$is_selected" />
+                <x-splade-file name="image" label="Image" :show-filename="false" filepond preview />
                 <x-splade-submit label="Save" />
             </x-splade-form>
         </div>

@@ -10,6 +10,6 @@ class AdminCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'slug'
+        'name', 'slug', 'image', 'is_selected'
     ];
 }

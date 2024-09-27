@@ -53,7 +53,7 @@ class UserController extends Controller
             });
         });
 
-        $users = QueryBuilder::for(User::where('partner_approval', 1))
+        $users = QueryBuilder::for(User::where('is_verified', 0))
             ->defaultSort('name')
             ->allowedSorts(['name', 'email'])
             ->allowedFilters(['name', 'email', $globalSearch])
@@ -81,10 +81,10 @@ class UserController extends Controller
     {
         $user = User::where('id', $request->id)->first();
         $user->update([
-            'partner_approval' => 0,
-            'partner_approval_date' => Carbon::now(),
+            'is_verified' => 1,
+            // 'partner_approval_date' => Carbon::now(),
         ]);
-        $user->syncRoles(6);
+        // $user->syncRoles(6);
 
         Toast::title('User was approved!')->autoDismiss(5);
         return redirect()->route('partner_approval');
@@ -129,9 +129,10 @@ class UserController extends Controller
             'address' => $request->address,
             'phone_number' => $request->phone_number,
             'description' => $request->description,
-            'partner_approval' => 1,
+            'partner_approval' => 0,
             'partner_approval_date' => Carbon::now(),
         ]);
+        $user->syncRoles(6);
 
         return redirect()->route('partner_registration');
     }
@@ -249,6 +250,12 @@ class UserController extends Controller
             'is_selected' => 'required',
         ])->validate();
 
+        $roles = $request->roles;
+
+        if(is_array($request->roles)){
+            $roles = $request->roles[0];
+        }
+
         if ($request->password) {
             $user->update([
                 'name' => $request->name,
@@ -263,7 +270,7 @@ class UserController extends Controller
                 'is_selected' => $request->is_selected,
             ]);
         }
-        $user->syncRoles((int) $request->roles);
+        $user->syncRoles((int) $roles);
 
         Toast::title('User was updated!')->autoDismiss(5);
 
@@ -278,12 +285,12 @@ class UserController extends Controller
         $products = Product::where('user_id', $user->id)->get();
         foreach ($products as $product) {
             $product->product_comments()->delete();
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -291,7 +298,7 @@ class UserController extends Controller
 
             $product_images = ProductImage::where('product_id', $product->id)->get();
             foreach ($product_images as $key => $value) {
-                $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
+                $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
                 try {
                     unlink($dirname);
                 } catch (\Throwable $th) {
@@ -307,12 +314,12 @@ class UserController extends Controller
         $services = Service::where('user_id', $user->id)->get();
         foreach ($services as $service) {
             $service->service_comments()->delete();
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $service->image_thumb);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -320,7 +327,7 @@ class UserController extends Controller
 
             $service_images = ServiceImage::where('service_id', $service->id)->get();
             foreach ($service_images as $key => $value) {
-                $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
+                $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/services/' . str_replace('/storage/services/', '', $value->image);
                 try {
                     unlink($dirname);
                 } catch (\Throwable $th) {
@@ -333,7 +340,7 @@ class UserController extends Controller
             $service->delete();
         }
 
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/profile-photos/' . str_replace('/storage/profile-photos/', '', $user->profile_photo_path);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/profile-photos/' . str_replace('/storage/profile-photos/', '', $user->profile_photo_path);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {

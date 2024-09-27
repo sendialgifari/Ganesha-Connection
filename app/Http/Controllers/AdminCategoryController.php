@@ -64,6 +64,8 @@ class AdminCategoryController extends Controller
     {
         Validator::make($request->all(), [
             'name' => 'required|max:255|unique:admin_categories,name',
+            'image' => 'required|image|mimes:jpeg,jpg,png',
+            'is_selected' => 'required',
         ])->validate();
 
         $image = '';
@@ -81,6 +83,7 @@ class AdminCategoryController extends Controller
             'name' => $request->name,
             'slug' => $slug,
             'image' => $image,
+            'is_selected' => $request->is_selected,
         ]);
 
         Toast::title('Admin Category was created!')->autoDismiss(5);
@@ -118,13 +121,15 @@ class AdminCategoryController extends Controller
 
         Validator::make($request->all(), [
             'name' => 'required|max:255',
+            'image' => 'required|image|mimes:jpeg,jpg,png',
+            'is_selected' => 'required',
         ])->validate();
 
         $slug = str_replace(array(" ", ".", ",", "'", '"', "?", "!", ":", "/"), array("-", "-", "", "", "", "", "", "", ""), strtolower($request->name));
 
         if ($request->file('image')) {
 
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/admin_categories/' . str_replace('/storage/admin_categories/', '', $admin_category->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/admin_categories/' . str_replace('/storage/admin_categories/', '', $admin_category->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -143,6 +148,7 @@ class AdminCategoryController extends Controller
         $admin_category->update([
             'name' => $request->name,
             'slug' => $slug,
+            'is_selected' => $request->is_selected,
         ]);
 
         Toast::title('Admin Category was updated!')->autoDismiss(5);
@@ -155,6 +161,12 @@ class AdminCategoryController extends Controller
      */
     public function destroy(AdminCategory $admin_category)
     {
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/admin_categories/' . str_replace('/storage/admin_categories/', '', $admin_category->image);
+        try {
+            unlink($dirname);
+        } catch (\Throwable $th) {
+        }
+
         $admin_category->delete();
         Toast::title('Admin Category was deleted!')->danger()->autoDismiss(5);
 

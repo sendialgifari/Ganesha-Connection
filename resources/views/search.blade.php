@@ -47,11 +47,13 @@
                                 'pmax' => request('pmax'),
                                 'rt' => request('rt'),
                                 'cat' => request('cat'),
+                                'adm_cat' => request('adm_cat'),
+                                'adm_p_cat' => request('adm_p_cat'),
                                 'unit' => request('unit'),
                                 'ob' => request('ob'),
                                 'user' => request('user'),
                             ]" method="GET" action="/search"
-                                :submit-on-change="['rt', 'cat', 'unit', 'type']">
+                                :submit-on-change="['rt', 'cat', 'adm_cat', 'adm_p_cat', 'unit', 'type']">
                                 @if ($title != 'Produk' && $title != 'Jasa')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tipe
@@ -98,6 +100,62 @@
                                     </ul>
                                 @endif
 
+
+                                <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Jenis Produk / Jasa
+                                </h6>
+                                <ul class="space-y-2 mb-4 text-sm">
+                                    @foreach ($admin_categories as $idx => $item)
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="{{ $item->id }}" name="adm_cat"
+                                                value="{{ $item->id }}"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $item->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    <li class="flex items-center">
+                                        <x-splade-checkbox id="non" name="adm_cat"
+                                            value="non"
+                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                        <label for="apple"
+                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            Non-Jenis
+                                        </label>
+                                    </li>
+                                </ul>
+
+                                <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Departemen Produk / Jasa
+                                </h6>
+                                <ul class="space-y-2 mb-4 text-sm">
+                                    @foreach ($admin_promotion_categories as $idx => $item)
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="{{ $item->id }}" name="adm_p_cat"
+                                                value="{{ $item->id }}"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $item->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    <li class="flex items-center">
+                                        <x-splade-checkbox id="non" name="adm_p_cat"
+                                            value="non"
+                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                        <label for="apple"
+                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            Non-Jenis
+                                        </label>
+                                    </li>
+                                </ul>
 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -205,6 +263,8 @@
                                 'pmax' => request('pmax'),
                                 'rt' => request('rt'),
                                 'cat' => request('cat'),
+                                'adm_cat' => request('adm_cat'),
+                                'adm_p_cat' => request('adm_p_cat'),
                                 'unit' => request('unit'),
                                 'ob' => request('ob'),
                                 'user' => request('user'),
@@ -240,12 +300,15 @@
                                             <span><b>{{ round(100 - ($item->price / $item->fake_price) * 100) }}%</b></span>
                                         </div>
                                     @endif
-                                    <img class="rounded-top mx-auto h-full dark:hidden" src="{{ $item->image_thumb }}"
-                                        alt="{{ $item->name }}" style="width: 100%;"/>
-                                    <img class="rounded-top mx-auto hidden h-full dark:block" src="{{ $item->image_thumb }}"
-                                        alt="{{ $item->name }}" />
+                                    <img class="rounded-top mx-auto h-full" src="{{ $item->image_thumb }}"
+                                        alt="{{ $item->name }}" style="width: 100%;max-height: 250px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6"/>
+                                    {{-- <img class="rounded-top mx-auto hidden h-full dark:block" src="{{ $item->image_thumb }}"
+                                        alt="{{ $item->name }}" /> --}}
                                 </div>
-                                <div  style="height: 160px;">
+                                <div  style="height: 180px;">
+                                    @if ($item->admin_promotion_category)
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag"/>
+                                    @endif
                                     @if($item->admin_category)
                             <div class="tag-product">{{$item->admin_category->name}}
                             </div>
@@ -253,9 +316,13 @@
 
                                     <div class="pt-1 p-2">
                                     <p
-                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+                                        class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
                                         {{ $item->name }}
                                     </p>
+
+                                    <p
+                                    class="text-md leading-tight text-gray-900 dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1rem;max-height: 3rem;white-space: initial;font-size: 10px">
+                                    {{ $item->short_description }}</p>
 
                                     <div class="mt-1 flex items-center gap-2">
                                         @if ($item->total_comments != 0)
@@ -273,14 +340,23 @@
                                             </p>
                                         @endif
                                         {{-- Total komen tidak ada di migration --}}
-                                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        {{-- <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                             ({{ $item->total_comments }} Review)
-                                        </p>
+                                        </p> --}}
                                     </div>
                                     <div class="mt-1 flex items-center justify-between gap-4">
                                         <p class="text-md leading-tight text-gray-900 dark:text-white">
-                                            <span class="font-extrabold">Rp.
-                                                {{ number_format($item->price, 0, ',', '.') }}</span>
+                                            <span class="font-extrabold">
+                                                @if($item->price_type == 0)
+                                                @if($item->price == 0)
+                                                Gratis
+                                                @else
+                                                Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                @endif
+                                                @else
+                                                Hubungi kami
+                                                @endif
+                                            </span>
                                                 @if ($item->fake_price != 0 && $item->fake_price != null)<span
                                                 style="font-weight: bold; font-size: 12px; color: #b2b2b2;"><del> Rp.
                                                     {{ number_format($item->fake_price, 0, ',', '.') }}</del></span>
@@ -293,6 +369,11 @@
                                             class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                     @endforeach
+                                    @if($item->is_readystock == 0)
+                                    <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                    @endif
                                     {{-- @endif --}}
                                     </div>
                                 </div>
@@ -323,11 +404,13 @@
                                 'pmax' => request('pmax'),
                                 'rt' => request('rt'),
                                 'cat' => request('cat'),
+                                'adm_cat' => request('adm_cat'),
+                                'adm_p_cat' => request('adm_p_cat'),
                                 'unit' => request('unit'),
                                 'ob' => request('ob'),
                                 'user' => request('user'),
                             ]" method="GET" action="/search"
-                                :submit-on-change="['rt', 'cat', 'unit', 'type']">
+                                :submit-on-change="['rt', 'cat', 'adm_cat', 'adm_p_cat', 'unit', 'type']">
                                 @if ($title != 'Produk' && $title != 'Jasa')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tipe
@@ -374,6 +457,62 @@
                                     </ul>
                                 @endif
 
+
+                                <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Jenis Produk / Jasa
+                                </h6>
+                                <ul class="space-y-2 mb-4 text-sm">
+                                    @foreach ($admin_categories as $idx => $item)
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="{{ $item->id }}" name="adm_cat"
+                                                value="{{ $item->id }}"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $item->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    <li class="flex items-center">
+                                        <x-splade-checkbox id="non" name="adm_cat"
+                                            value="non"
+                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                        <label for="apple"
+                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            Non-Jenis
+                                        </label>
+                                    </li>
+                                </ul>
+
+                                <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Departemen Produk / Jasa
+                                </h6>
+                                <ul class="space-y-2 mb-4 text-sm">
+                                    @foreach ($admin_promotion_categories as $idx => $item)
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="{{ $item->id }}" name="adm_p_cat"
+                                                value="{{ $item->id }}"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $item->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    <li class="flex items-center">
+                                        <x-splade-checkbox id="non" name="adm_p_cat"
+                                            value="non"
+                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                        <label for="apple"
+                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            Non-Jenis
+                                        </label>
+                                    </li>
+                                </ul>
 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -461,11 +600,13 @@
                                 'pmax' => request('pmax'),
                                 'rt' => request('rt'),
                                 'cat' => request('cat'),
+                                'adm_cat' => request('adm_cat'),
+                                'adm_p_cat' => request('adm_p_cat'),
                                 'unit' => request('unit'),
                                 'ob' => request('ob'),
                                 'user' => request('user'),
                             ]" method="GET" action="/search"
-                                :submit-on-change="['rt', 'cat', 'unit', 'type']">
+                                :submit-on-change="['rt', 'cat', 'adm_cat', 'adm_p_cat', 'unit', 'type']">
                                 @if ($title != 'Produk' && $title != 'Jasa')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tipe
@@ -512,6 +653,62 @@
                                     </ul>
                                 @endif
 
+
+                                <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Jenis Produk / Jasa
+                                </h6>
+                                <ul class="space-y-2 mb-4 text-sm">
+                                    @foreach ($admin_categories as $idx => $item)
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="{{ $item->id }}" name="adm_cat"
+                                                value="{{ $item->id }}"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $item->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    <li class="flex items-center">
+                                        <x-splade-checkbox id="non" name="adm_cat"
+                                            value="non"
+                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                        <label for="apple"
+                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            Non-Jenis
+                                        </label>
+                                    </li>
+                                </ul>
+
+                                <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Departemen Produk / Jasa
+                                </h6>
+                                <ul class="space-y-2 mb-4 text-sm">
+                                    @foreach ($admin_promotion_categories as $idx => $item)
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="{{ $item->id }}" name="adm_p_cat"
+                                                value="{{ $item->id }}"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                {{ $item->name }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                    <li class="flex items-center">
+                                        <x-splade-checkbox id="non" name="adm_p_cat"
+                                            value="non"
+                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                        <label for="apple"
+                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                            Non-Jenis
+                                        </label>
+                                    </li>
+                                </ul>
 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">

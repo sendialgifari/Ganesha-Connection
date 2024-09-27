@@ -31,6 +31,11 @@ class Service extends Model
         'total_comment_star_5',
         'is_selected',
         'admin_category_id',
+        'price_type',
+        'is_readystock',
+        'image_real',
+        'external_link',
+        'admin_promotion_category_id',
     ];
 
     // protected $casts = [
@@ -65,5 +70,10 @@ class Service extends Model
     public function admin_category()
     {
         return $this->hasOne('App\Models\AdminCategory', 'id', 'admin_category_id');
+    }
+
+    public function admin_promotion_category()
+    {
+        return $this->hasOne('App\Models\AdminPromotionCategory', 'id', 'admin_promotion_category_id');
     }
 }

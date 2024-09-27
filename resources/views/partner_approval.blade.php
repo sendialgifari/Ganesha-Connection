@@ -18,11 +18,11 @@
                         confirm-button="Yes" cancel-button="No">
                         <x-splade-button class="font-bold bg-indigo-500 hover:bg-indigo-700 text-white">Approve</x-splade-button>
                     </x-splade-form>
-                    <x-splade-form action="{{ route('partner_decline_update', ['id' => $user->id])}}" method="put" confirm="Decline"
+                    {{-- <x-splade-form action="{{ route('partner_decline_update', ['id' => $user->id])}}" method="put" confirm="Decline"
                         confirm-text="Are you sure you want to decline user?"
                         confirm-button="Yes" cancel-button="No">
                         <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Decline</x-splade-button>
-                    </x-splade-form>
+                    </x-splade-form> --}}
                     @endcell
                 </x-splade-table>
             </div>

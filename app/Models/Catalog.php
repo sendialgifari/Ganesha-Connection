@@ -18,4 +18,9 @@ class Catalog extends Model
     {
         return $this->hasOne('App\Models\AdminCategory', 'id', 'admin_category_id');
     }
+
+    public function admin_promotion_category()
+    {
+        return $this->hasOne('App\Models\AdminPromotionCategory', 'id', 'admin_promotion_category_id');
+    }
 }

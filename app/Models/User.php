@@ -41,7 +41,8 @@ class User extends Authenticatable
         'description',
         'partner_approval',
         'partner_approval_date',
-        'is_selected'
+        'is_selected',
+        'is_verified',
     ];
 
     /**

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\WorkUnit;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Catalog;
+use App\Models\AdminCategory;
+use App\Models\AdminPromotionCategory;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\ServiceComment;
@@ -67,13 +69,15 @@ class LandingController extends Controller
             'sliders' => Splade::onLazy(fn() => Slider::orderBy('id', 'DESC')->get()),
             'product_categories_selected' => ProductCategory::where('is_selected', 1)->orderBy('name', 'ASC')->limit(4)->get(),
             'service_categories_selected' => ServiceCategory::where('is_selected', 1)->orderBy('name', 'ASC')->limit(4)->get(),
-            'product_selected' => Product::where('is_selected', 1)->orderBy('name', 'ASC')->limit(6)->get(),
-            'service_selected' => Service::where('is_selected', 1)->orderBy('name', 'ASC')->limit(6)->get(),
+            'product_selected' => Product::where('is_selected', 1)->orderBy('name', 'ASC')->limit(12)->get(),
+            'service_selected' => Service::where('is_selected', 1)->orderBy('name', 'ASC')->limit(12)->get(),
             'partner_selected' => User::where('is_selected', 1)->orderBy('name', 'ASC')->limit(8)->get(),
             // 'products' => Splade::onLazy(fn() => Product::latest()->limit(10)->get()),
             // 'services' => Splade::onLazy(fn() => Service::latest()->limit(10)->get()),
-            'products' => Product::latest()->limit(10)->get(),
-            'services' => Service::latest()->limit(10)->get(),
+            'products' => Product::latest()->limit(12)->get(),
+            'services' => Service::latest()->limit(12)->get(),
+            'admin_promotion_categories' => AdminPromotionCategory::where('is_selected', 1)->orderBy('name', 'ASC')->get(),
+            'admin_categories' => AdminCategory::where('is_selected', 1)->orderBy('name', 'ASC')->get(),
         ]);
     }
 
@@ -120,6 +124,8 @@ class LandingController extends Controller
 
         $q = $request->input('q');
         $cat = $request->input('cat');
+        $adm_cat = $request->input('adm_cat');
+        $adm_p_cat = $request->input('adm_p_cat');
         $type = $request->input('type');
         $pmin = $request->input('pmin');
         $pmax = $request->input('pmax');
@@ -128,6 +134,12 @@ class LandingController extends Controller
         $unit = $request->input('unit');
         $user = $request->input('user');
         $query = strtolower($q);
+
+        $admin_categories = AdminCategory::orderBy('name', 'ASC')->get();
+
+        $admin_promotion_categories = AdminPromotionCategory::orderBy('name', 'ASC')->get();
+
+        $admin_categories_ids = $admin_categories->pluck('id')->toArray();
 
         $categories = "";
         if ($type == "produk") {
@@ -151,7 +163,35 @@ class LandingController extends Controller
 
             $categories = ServiceCategory::orderBy('name', 'ASC')->get();
         } else {
-            $title = 'Search "' . $query . '"';
+            if($query){
+                $title = 'Search "' . $query . '"';
+            } else {
+                if($adm_p_cat){
+                    if($adm_p_cat == "non"){
+                        $title = 'Search Departemen Non-Jenis';
+                    } else {
+                        $admin_promotion_category = AdminPromotionCategory::where('id', $adm_p_cat)->first();
+                        if($admin_promotion_category){
+                            $title = 'Search Departemen '. $admin_promotion_category->name;
+                        } else {
+                            $title = 'Search Departemen Non-Jenis';
+                        }
+                    }
+                } else {
+                    if($adm_cat == "non"){
+                        $title = 'Search Jenis Produk / Jasa Non-Jenis';
+                    } else {
+                        $admin_category = AdminCategory::where('id', $adm_cat)->first();
+                        if($admin_category){
+                            $title = 'Search Jenis Produk / Jasa '. $admin_category->name;
+                        } else {
+                            $title = 'Search Jenis Produk / Jasa Non-Jenis';
+                        }
+                    }
+                }
+                
+            }
+            
             // $products = Product::select('admin_category_id', 'id', 'user_id', 'product_category_id as category_id', 'name', 'fake_price', 'price', 'image_thumb', 'created_at', 'slug', 'total_comments', 'total_comment_star_1', 'total_comment_star_2', 'total_comment_star_3', 'total_comment_star_4', 'total_comment_star_5')->whereRaw('lower(name) like (?)', ["%{$query}%"]);
             // $products = $products->addSelect(DB::raw("'produk' as type"));
 
@@ -215,6 +255,20 @@ class LandingController extends Controller
                 $data = $data->where('service_category_id', $cat);
             }
         }
+        if ($adm_cat) {
+            if($adm_cat == "non"){
+                $data = $data->where('admin_category_id', null);
+            } else {
+                $data = $data->where('admin_category_id', $adm_cat);
+            }
+        }
+        if ($adm_p_cat) {
+            if($adm_p_cat == "non"){
+                $data = $data->where('admin_promotion_category_id', null);
+            } else {
+                $data = $data->where('admin_promotion_category_id', $adm_p_cat);
+            }
+        }
         if (!$pmin) {
             $pmin = 0;
         }
@@ -253,12 +307,16 @@ class LandingController extends Controller
 
         $work_units = WorkUnit::where('is_active', 1)->orderBy('name', 'ASC')->get();
 
+        
+
         $data = array(
             'title' => $title,
             'search_type' => $type,
             'data' => $data,
             'categories' => $categories,
             'work_units' => $work_units,
+            'admin_categories' => $admin_categories,
+            'admin_promotion_categories' => $admin_promotion_categories,
         );
 
         return view('search', $data);

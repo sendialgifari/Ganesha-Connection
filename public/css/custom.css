@@ -2,6 +2,18 @@
     font-size: 1px !important;
 } */
 
+@layer utilities {
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+     /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+    }
+  }
+
 .rounded-top {
     border-radius: .375rem .375rem 0 0;
 }
@@ -40,6 +52,23 @@
     color: darkred;
 }
 
+.admin-category-detail {
+    width: 100%;
+    background: #ffa800;
+    font-size: 16px;
+    border-radius: 5px;
+    display: block;
+    padding: 10px;
+    background-image: url(../../images/accent2-admin-category.png);
+    background-repeat: no-repeat;
+    background-size: 260px;
+    background-position-x: right;
+    text-shadow: 1px 1px 2px whitesmoke;
+    color: darkred;
+    margin-bottom: 10px;
+    height: 43px;
+}
+
 .discount-tag {
     position: absolute;
     background: red;
@@ -48,6 +77,17 @@
     padding: 3px 10px;
     margin-top: 10px;
     border-radius: 0 30px 30px 0;
+}
+
+
+.admin-category-promo-tag {
+    height: 30px;
+    position: absolute;
+    margin-top: -30px;
+    margin-left: 0;
+    background: mediumblue;
+    padding: 0px 10px;
+    border-radius: 0 10px 0px 0;
 }
 
 .product-grid {
@@ -64,7 +104,7 @@
     border-radius: 10px;
     width: 350px;
     display: inline-block;
-    padding: 1.5rem;
+    padding: 2.1rem;
     margin-right: -100px;
 
 }
@@ -88,7 +128,7 @@
 }
 
 .pilihan-selanjutnya {
-    height: 310px;
+    height: 330px;
     background: #a6e1ec;
     background-image: url(../../images/accent-selanjutnya.png);
     background-repeat: no-repeat;
@@ -105,6 +145,13 @@
     width: 100px;
     display: inline-block;
     margin-right: 15px;
+    vertical-align: top;
+}
+
+.admin_category_tag {
+    background: lightgray;
+    border-radius: 50%;
+    padding: 10px;
 }
 
 
@@ -133,7 +180,7 @@
 .produk-pilihan-container {
     background: #8bcfdc;
     padding: 0px 15px 20px 15px;
-    height: 360px;
+    height: 380px;
 }
 
 .product-title-box-logo{
@@ -144,7 +191,7 @@
 .jasa-pilihan-container {
     background: #8bcfdc;
     padding: 0px 15px 20px 15px;
-    height: 360px;
+    height: 380px;
 }
 
 
@@ -174,6 +221,10 @@
     width: 45px;
 }
 
+}
+
+#success-copy{
+    display: none;
 }
 
 /* Medium devices (landscape tablets, 768px and up) */

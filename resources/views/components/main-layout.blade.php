@@ -10,6 +10,7 @@
                         <img src="{{asset('images/logo-g.png')}}" class="h-8 me-3" alt="Gannect Logo" />
                     </Link>
 
+
                    <x-splade-form :default="['q' => request('q')]" class="flex items-center mx-auto" style="width: 100%; margin-right:8px" method="GET" action="/search">
                         <label for="simple-search" class="sr-only">Search</label>
                         <div class="relative w-full">
@@ -91,6 +92,7 @@
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <Link href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="{{asset('images/logo-ganect-white.png')}}" class="h-8 me-3" alt="Gannect Logo" />
+                <img src="{{asset('images/logo-itb.png')}}" class="h-8 me-3" alt="Gannect Logo" />
             </Link>
             <x-splade-toggle>
                 <div class="flex md:order-2 items-center">

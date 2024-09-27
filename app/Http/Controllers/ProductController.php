@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductWorkUnit;
 use Illuminate\Support\Facades\Validator;
 use App\Models\AdminCategory;
+use App\Models\AdminPromotionCategory;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -88,13 +89,24 @@ class ProductController extends Controller
     public function create()
     {
         $admin_categories = AdminCategory::pluck('name', 'id')->toArray();
+        $admin_categories[0] = "Tidak ada kategori admin";
+        $admin_promotion_categories = AdminPromotionCategory::pluck('name', 'id')->toArray();
+        $admin_promotion_categories[0] = "Tidak ada kategori admin";
         $product_categories = ProductCategory::pluck('name', 'id')->toArray();
         $work_units = WorkUnit::pluck('name', 'id')->toArray();
         $is_selected = [
             '0' => 'No',
             '1' => 'Yes',
         ];
-        return view('products.create', compact('product_categories', 'work_units', 'is_selected', 'admin_categories'));
+        $price_type = [
+            '0' => 'Menggunakan harga',
+            '1' => 'Hubungi kami',
+        ];
+        $is_readystock = [
+            '0' => 'Pre Order',
+            '1' => 'Ready Stock',
+        ];
+        return view('products.create', compact('product_categories', 'work_units', 'is_selected', 'admin_categories', 'admin_promotion_categories', 'price_type', 'is_readystock'));
     }
 
     /**
@@ -106,17 +118,19 @@ class ProductController extends Controller
             'product_category_id' => 'required',
             'name' => 'required|max:255|unique:products,name',
             'description' => 'required',
-            'price' => 'required|numeric',
+            // 'price' => 'required|numeric',
             'short_description' => 'required',
             'image' => 'required|image|mimes:jpeg,jpg,png',
             // 'fake_price' => 'required|numeric',
             'is_selected' => 'required',
+            'price_type' => 'required|numeric',
+            'is_readystock' => 'required|numeric',
         ])->validate();
 
-        $fileName = "img-" . $request->file('image')->hashName();
+        $fileName = "img-product-" . $request->file('image')->hashName();
         $file = $request->file('image');
         $img = Image::read($file->getRealPath());
-        $img->cover(1000, 1000, 'center')->save(storage_path('app/public/products/' . $fileName));
+        $img->cover(700, 700, 'center')->toJpeg(90)->save(storage_path('app/public/products/' . $fileName));
         // $img->resize(1000, 1000, function ($constraint) {
         //     $constraint->aspectRatio();
         // })->save(storage_path('app/public/products/' . $fileName));
@@ -124,39 +138,68 @@ class ProductController extends Controller
         $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
         $file = $request->file('image');
         $img = Image::read($file->getRealPath());
-        $img->cover(200, 200, 'center')->save(storage_path('app/public/products/' . $fileNameThumb));
+        $img->cover(200, 200, 'center')->toJpeg(90)->save(storage_path('app/public/products/' . $fileNameThumb));
         // $img->resize(200, 200, function ($constraint) {
         //     $constraint->aspectRatio();
         // })->save(storage_path('app/public/products/' . $fileNameThumb));
 
         $slug = str_replace(array(" ", ".", ",", "'", '"', "?", "!", ":", "/"), array("-", "-", "", "", "", "", "", "", ""), strtolower($request->name));
 
+        $price = $request->price;
+        if($request->price_type == 1){
+            $price = 0;
+        }
+        if(is_null($price)){
+            $price = 0;
+        }
+
+        $admin_category_id = $request->admin_category_id;
+        if($request->admin_category_id == 0){
+            $admin_category_id = null;
+        }
+
+        $admin_promotion_category_id = $request->admin_promotion_category_id;
+        if($request->admin_promotion_category_id == 0){
+            $admin_promotion_category_id = null;
+        }
+
+        $fake_price = $request->fake_price;
+        if($request->is_fake_price == "no"){
+            $fake_price = 0;
+        }
+
         $user = Auth::user();
         $product = Product::create([
-            'admin_category_id' => $request->admin_category_id,
+            'admin_category_id' => $admin_category_id,
+            'admin_promotion_category_id' => $admin_promotion_category_id,
             'product_category_id' => $request->product_category_id,
             'name' => $request->name,
             'user_id' => $user->id,
             'description' => $request->description,
-            'price' => $request->price,
+            'price' => $price,
             'short_description' => $request->short_description,
             'image' => '/storage/products/' . $fileName,
             'image_thumb' => '/storage/products/' . $fileNameThumb,
-            'fake_price' => $request->fake_price,
+            'fake_price' => $fake_price,
+            'price_type' => $request->price_type,
             'is_selected' => $request->is_selected,
+            'is_readystock' => $request->is_readystock,
             'slug' => $slug,
+            'external_link' => $request->external_link,
         ]);
 
-        foreach ($request->images as $value) {
-            $fileName = "img-" . $value->hashName();
-            $file = $value;
-            $img = Image::read($file->getRealPath());
-            $img->cover(1000, 1000, 'center')->save(storage_path('app/public/products/' . $fileName));
+        if($request->images){
+            foreach ($request->images as $value) {
+                $fileName = "img-product-" . $value->hashName();
+                $file = $value;
+                $img = Image::read($file->getRealPath());
+                $img->cover(700, 700, 'center')->toJpeg(90)->save(storage_path('app/public/products/' . $fileName));
 
-            ProductImage::create([
-                'product_id' => $product->id,
-                'image' => '/storage/products/' . $fileName,
-            ]);
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => '/storage/products/' . $fileName,
+                ]);
+            }
         }
 
         $product->work_units()->attach($request->work_units);
@@ -181,6 +224,9 @@ class ProductController extends Controller
     {
         $product->images = array_column($product->images->toArray(), 'image');
         $admin_categories = AdminCategory::pluck('name', 'id')->toArray();
+        $admin_categories[0] = "Tidak ada kategori admin";
+        $admin_promotion_categories = AdminPromotionCategory::pluck('name', 'id')->toArray();
+        $admin_promotion_categories[0] = "Tidak ada kategori admin";
         $product_categories = ProductCategory::pluck('name', 'id')->toArray();
         $work_units = WorkUnit::pluck('name', 'id')->toArray();
         return view('products.edit', [
@@ -191,7 +237,16 @@ class ProductController extends Controller
                 '0' => 'No',
                 '1' => 'Yes',
             ],
+            'price_type' => [
+                '0' => 'Menggunakan harga',
+                '1' => 'Hubungi kami',
+            ],
+            'is_readystock' => [
+                '0' => 'Pre Order',
+                '1' => 'Ready Stock',
+            ],
             'admin_categories' => $admin_categories,
+            'admin_promotion_categories' => $admin_promotion_categories,
         ]);
     }
 
@@ -204,35 +259,37 @@ class ProductController extends Controller
             'product_category_id' => 'required',
             'name' => 'required|max:255',
             'description' => 'required',
-            'price' => 'required|numeric',
+            // 'price' => 'required|numeric',
             'short_description' => 'required',
             'image' => 'required|image|mimes:jpeg,jpg,png',
             // 'fake_price' => 'required|numeric',
             // 'is_selected' => 'required',
+            'price_type' => 'required|numeric',
+            'is_readystock' => 'required|numeric',
         ])->validate();
 
         if ($request->file('image')) {
 
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
             }
 
-            $fileName = "img-" . $request->file('image')->hashName();
+            $fileName = "img-product-" . $request->file('image')->hashName();
             $file = $request->file('image');
             $img = Image::read($file->getRealPath());
-            $img->cover(1000, 1000, 'center')->save(storage_path('app/public/products/' . $fileName));
+            $img->cover(700, 700, 'center')->toJpeg(90)->save(storage_path('app/public/products/' . $fileName));
 
             $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
             $file = $request->file('image');
             $img = Image::read($file->getRealPath());
-            $img->cover(200, 200, 'center')->save(storage_path('app/public/products/' . $fileNameThumb));
+            $img->cover(200, 200, 'center')->toJpeg(90)->save(storage_path('app/public/products/' . $fileNameThumb));
 
             $product->update([
                 'image' => '/storage/products/' . $fileName,
@@ -248,22 +305,49 @@ class ProductController extends Controller
             $is_selected = $product->is_selected;
         }
 
+        $price = $request->price;
+        if($request->price_type == 1){
+            $price = 0;
+        }
+        if(is_null($price)){
+            $price = 0;
+        }
+
+        $admin_category_id = $request->admin_category_id;
+        if($request->admin_category_id == 0){
+            $admin_category_id = null;
+        }
+
+        $admin_promotion_category_id = $request->admin_promotion_category_id;
+        if($request->admin_promotion_category_id == 0){
+            $admin_promotion_category_id = null;
+        }
+
+        $fake_price = $request->fake_price;
+        if($request->is_fake_price == "no"){
+            $fake_price = 0;
+        }
+
         $product->update([
-            'admin_category_id' => $request->admin_category_id,
+            'admin_category_id' => $admin_category_id,
+            'admin_promotion_category_id' => $admin_promotion_category_id,
             'product_category_id' => $request->product_category_id,
             'name' => $request->name,
             'description' => $request->description,
-            'price' => $request->price,
+            'price' => $price,
             'short_description' => $request->short_description,
-            'fake_price' => $request->fake_price,
+            'fake_price' => $fake_price,
+            'price_type' => $request->price_type,
             'is_selected' => $is_selected,
+            'is_readystock' => $request->is_readystock,
             'slug' => $slug,
+            'external_link' => $request->external_link,
         ]);
         $product->work_units()->sync($request->work_units);
 
         $product_images = ProductImage::where('product_id', $product->id)->get();
         foreach ($product_images as $key => $value) {
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
@@ -274,10 +358,10 @@ class ProductController extends Controller
 
         if($request->images){
             foreach ($request->images as $value) {
-                $fileName = "img-" . $value->hashName();
+                $fileName = "img-product-" . $value->hashName();
                 $file = $value;
                 $img = Image::read($file->getRealPath());
-                $img->cover(1000, 1000, 'center')->save(storage_path('app/public/products/' . $fileName));
+                $img->cover(700, 700, 'center')->toJpeg(90)->save(storage_path('app/public/products/' . $fileName));
     
                 ProductImage::create([
                     'product_id' => $product->id,
@@ -297,12 +381,12 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->product_comments()->delete();
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {
         }
-        $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
+        $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $product->image_thumb);
         try {
             unlink($dirname);
         } catch (\Throwable $th) {
@@ -310,7 +394,7 @@ class ProductController extends Controller
 
         $product_images = ProductImage::where('product_id', $product->id)->get();
         foreach ($product_images as $key => $value) {
-            $dirname = '/usr/share/nginx/html/itbproject/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
+            $dirname = '/usr/share/nginx/html/ganeshaconnection/storage/app/public/products/' . str_replace('/storage/products/', '', $value->image);
             try {
                 unlink($dirname);
             } catch (\Throwable $th) {
