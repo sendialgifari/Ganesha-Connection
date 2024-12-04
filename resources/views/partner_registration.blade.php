@@ -28,7 +28,7 @@
 
                             <!-- Name -->
                             <div class="col-span-6 sm:col-span-4">
-                                <x-splade-input id="name" name="name" :label="__('Name')" autocomplete="name"
+                                <x-splade-input id="name" name="name" :label="__('Nama')" autocomplete="name"
                                     required />
                             </div>
 
@@ -40,28 +40,37 @@
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
-                                <x-splade-select name="gender" :options="$gender" :label="__('Gender')" required />
+                                <x-splade-select name="community_id" :options="$communities" :label="__('Pilih Civitas Akademika')" required />
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
-                                <x-splade-select name="province_id" :options="$provinces" :label="__('Select Province')" required />
+                                <x-splade-input id="unique_id" name="unique_id" :label="__('No. Ijazah/NIM/NIP')" autocomplete="unique_id"
+                                    required />
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <x-splade-select name="gender" :options="$gender" :label="__('Jenis Kelamin')" required />
+                            </div>
+
+                            <div class="col-span-6 sm:col-span-4">
+                                <x-splade-select name="province_id" :options="$provinces" :label="__('Pilih Provinsi')" required />
                             </div>
                             <div class="col-span-6 sm:col-span-4">
                                 <x-splade-select name="city_id" remote-url="`/api/cities/${form.province_id}`"
-                                    option-label="kabupaten_kota" option-value="id" :label="__('Select City')" required />
+                                    option-label="kabupaten_kota" option-value="id" :label="__('Pilih Kabupaten Kota')" required />
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
-                                <x-splade-textarea name="address" :label="__('Address')" autosize required />
+                                <x-splade-textarea name="address" :label="__('Alamat')" autosize required />
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
-                                <x-splade-input id="phone_number" name="phone_number" :label="__('Phone Number')"
+                                <x-splade-input id="phone_number" name="phone_number" :label="__('Nomor Telepon / Whatsapp')"
                                     autocomplete="phone_number" required />
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
-                                <x-splade-wysiwyg name="description" label="Description" :jodit="['showXPathInStatusbar' => true]" />
+                                <x-splade-wysiwyg name="description" label="Deskripsi Partner" :jodit="['showXPathInStatusbar' => true]" />
                             </div>
 
 

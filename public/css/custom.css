@@ -129,10 +129,56 @@
 
 .pilihan-selanjutnya {
     height: 330px;
-    background: #a6e1ec;
+    background: #ffcc00;
     background-image: url(../../images/accent-selanjutnya.png);
     background-repeat: no-repeat;
     background-position: -100px 20px;
+}
+
+.icon-product {
+    height: 32px;
+    width: 32px;
+    background-image: url(../../images/iconbar.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    display: block;
+    margin: auto; 
+}
+.icon-jenis {
+    height: 32px;
+    width: 32px;
+    background-image: url(../../images/iconbar.png);
+    background-repeat: no-repeat;
+    background-position: -64px 0px;
+    display: block;
+    margin: auto; 
+}
+.icon-department {
+    height: 32px;
+    width: 32px;
+    background-image: url(../../images/iconbar.png);
+    background-repeat: no-repeat;
+    background-position: -96px 0px;
+    display: block;
+    margin: auto; 
+}
+.icon-unit {
+    height: 32px;
+    width: 32px;
+    background-image: url(../../images/iconbar.png);
+    background-repeat: no-repeat;
+    background-position: -128px 0px;
+    display: block;
+    margin: auto; 
+}
+.icon-jasa {
+    height: 32px;
+    width: 32px;
+    background-image: url(../../images/iconbar.png);
+    background-repeat: no-repeat;
+    background-position: -32px 0px;
+    display: block;
+    margin: auto; 
 }
 
 
@@ -178,7 +224,7 @@
 @media only screen and (max-width: 640px) {
 
 .produk-pilihan-container {
-    background: #8bcfdc;
+    background: #e81f65;
     padding: 0px 15px 20px 15px;
     height: 380px;
 }
@@ -189,7 +235,7 @@
 
 
 .jasa-pilihan-container {
-    background: #8bcfdc;
+    background: #e81f65;
     padding: 0px 15px 20px 15px;
     height: 380px;
 }
@@ -223,12 +269,16 @@
 
 }
 
-#success-copy{
-    display: none;
-}
-
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (max-width: 768px) {...}
+@media only screen and (max-width: 768px) {
+    .carousel{
+        margin: 5px 5px 0px 5px;
+    }
+    .carousel-slider{
+        max-height: 340px;
+        height: calc(100vw - 60vw);
+    }
+}
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (max-width: 1024px) {...}

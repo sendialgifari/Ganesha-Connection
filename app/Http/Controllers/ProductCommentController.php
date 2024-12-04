@@ -107,7 +107,7 @@ class ProductCommentController extends Controller
             'ratings' => $request->ratings,
         ]);
 
-        Toast::title('Product Comment was created!')->autoDismiss(5);
+        Toast::title('Komentar produk berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('detail', ['type'=>'produk','slug'=>$product->slug]);
     }
@@ -151,7 +151,7 @@ class ProductCommentController extends Controller
         $product->update($updateData);
 
         $product_comment->delete();
-        Toast::title('Product Comment was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Komentar produk berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('product_comments.index');
     }

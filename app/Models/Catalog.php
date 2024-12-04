@@ -23,4 +23,9 @@ class Catalog extends Model
     {
         return $this->hasOne('App\Models\AdminPromotionCategory', 'id', 'admin_promotion_category_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
 }

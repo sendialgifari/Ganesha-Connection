@@ -64,6 +64,8 @@ Route::middleware(['splade'])->group(function () {
 
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
             Route::get('/partner_registration', [UserController::class, 'partner_registration'])->name('partner_registration');
+
+            Route::put('/user_update_public', [UserController::class, 'user_update_public'])->name('user_update_public');
             
             Route::middleware(['role:superadmin'])->group(function () {
                 Route::resource('admin_categories', AdminCategoryController::class);

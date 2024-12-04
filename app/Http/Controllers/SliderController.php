@@ -66,7 +66,7 @@ class SliderController extends Controller
         $file = $request->file('image');
         $img = Image::read($file->getRealPath());
         // $img->scaleDown(width: 1280)->save(storage_path('app/public/sliders/' . $fileName));
-        $img->toJpeg(50)->save(storage_path('app/public/sliders/' . $fileName));
+        $img->toJpeg(85)->save(storage_path('app/public/sliders/' . $fileName));
 
         $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
         $file = $request->file('image');
@@ -81,7 +81,7 @@ class SliderController extends Controller
             'image_thumb' => '/storage/sliders/' . $fileNameThumb,
         ]);
 
-        Toast::title('Slider was created!')->autoDismiss(5);
+        Toast::title('Slider berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('sliders.index');
     }
@@ -132,7 +132,7 @@ class SliderController extends Controller
             $file = $request->file('image');
             $img = Image::read($file->getRealPath());
             // $img->scaleDown(width: 1280)->save(storage_path('app/public/sliders/' . $fileName));
-            $img->toJpeg(50)->save(storage_path('app/public/sliders/' . $fileName));
+            $img->toJpeg(85)->save(storage_path('app/public/sliders/' . $fileName));
 
             $fileNameThumb = "img-thumb-" . $request->file('image')->hashName();
             $file = $request->file('image');
@@ -152,7 +152,7 @@ class SliderController extends Controller
             'url' => $request->url,
         ]);
 
-        Toast::title('Slider was updated!')->autoDismiss(5);
+        Toast::title('Slider berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('sliders.index');
     }
@@ -174,7 +174,7 @@ class SliderController extends Controller
         }
 
         $slider->delete();
-        Toast::title('Slider was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Slider berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('sliders.index');
     }

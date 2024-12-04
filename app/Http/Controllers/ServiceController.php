@@ -50,13 +50,13 @@ class ServiceController extends Controller
             return view('services.index', [
                 'services' => SpladeTable::for($services)
                     ->defaultSort('name')
-                    ->column('name', sortable: true, searchable: true)
+                    ->column('name', 'nama', sortable: true, searchable: true)
                     ->withGlobalSearch(columns: ['name'])
-                    ->column('image')
-                    ->column('service_category.name', sortable: true, searchable: true)
-                    ->column('is_selected', sortable: true, searchable: true)
-                    ->column('user.name', sortable: true, searchable: true)
-                    ->column('admin_category.name', sortable: true, searchable: true)
+                    ->column('image', 'gambar')
+                    ->column('service_category.name', 'kategori jasa', sortable: true, searchable: true)
+                    ->column('is_selected', 'pilihan', sortable: true, searchable: true)
+                    ->column('user.name', 'owner', sortable: true, searchable: true)
+                    ->column('admin_category.name', 'admin kategori', sortable: true, searchable: true)
                     ->selectFilter('service_category_id', $categories)
                     ->column('action')
                 ,
@@ -109,7 +109,11 @@ class ServiceController extends Controller
             '0' => 'Pre Order',
             '1' => 'Ready Stock',
         ];
-        return view('services.create', compact('service_categories', 'work_units', 'is_selected', 'admin_categories', 'admin_promotion_categories', 'price_type', 'is_readystock'));
+        $is_public = [
+            '0' => 'Hanya Civitas ITB',
+            '1' => 'Publik',
+        ];
+        return view('services.create', compact('service_categories', 'work_units', 'is_selected', 'admin_categories', 'admin_promotion_categories', 'price_type', 'is_readystock', 'is_public'));
     }
 
     /**
@@ -128,6 +132,7 @@ class ServiceController extends Controller
             'is_selected' => 'required',
             'price_type' => 'required|numeric',
             'is_readystock' => 'required|numeric',
+            'is_public' => 'required|numeric',
         ])->validate();
 
         $fileName = "img-service-" . $request->file('image_real')->hashName();
@@ -187,6 +192,7 @@ class ServiceController extends Controller
             'price_type' => $request->price_type,
             'is_selected' => $request->is_selected,
             'is_readystock' => $request->is_readystock,
+            'is_public' => $request->is_public,
             'slug' => $slug,
             'external_link' => $request->external_link,
         ]);
@@ -207,7 +213,7 @@ class ServiceController extends Controller
 
         $service->work_units()->attach($request->work_units);
 
-        Toast::title('Service was created!')->autoDismiss(5);
+        Toast::title('Jasa berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('services.index');
     }
@@ -248,6 +254,10 @@ class ServiceController extends Controller
                 '0' => 'Pre Order',
                 '1' => 'Ready Stock',
             ],
+            'is_public' => [
+                '0' => 'Hanya Civitas ITB',
+                '1' => 'Publik',
+            ],
             'admin_categories' => $admin_categories,
             'admin_promotion_categories' => $admin_promotion_categories,
         ]);
@@ -268,7 +278,8 @@ class ServiceController extends Controller
             // 'fake_price' => 'required|numeric',
             // 'is_selected' => 'required',
             'price_type' => 'required|numeric',
-            'is_readystock' => 'required|numeric',
+            // 'is_readystock' => 'required|numeric',
+            // 'is_public' => 'required|numeric',
         ])->validate();
 
         if ($request->file('image_real')) {
@@ -353,7 +364,8 @@ class ServiceController extends Controller
             'fake_price' => $fake_price,
             'price_type' => $request->price_type,
             'is_selected' => $is_selected,
-            'is_readystock' => $request->is_readystock,
+            // 'is_readystock' => $request->is_readystock,
+            'is_public' => $request->is_public,
             'slug' => $slug,
             'external_link' => $request->external_link,
         ]);
@@ -384,7 +396,7 @@ class ServiceController extends Controller
             }
         }
 
-        Toast::title('Service was updated!')->autoDismiss(5);
+        Toast::title('Jasa berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('services.index');
     }
@@ -424,7 +436,7 @@ class ServiceController extends Controller
 
         $service->work_units()->detach();
         $service->delete();
-        Toast::title('Service was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Jasa berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('services.index');
     }

@@ -99,6 +99,17 @@
                     
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
                         {{ $detail_data->name }}
+                        @if ($type == 'partner')
+                        @if($detail_data->is_verified == 1)
+                        <span
+                                class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                style="white-space: nowrap;">Verified</span>
+                        @else
+                        <span
+                                class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                style="white-space: nowrap;">Unverified</span>
+                        @endif
+                        @endif
                     </h1>
                     <!--@if ($type !== 'partner')
                      <div class="flex items-center gap-2 mt-2 sm:mt-0">
@@ -161,6 +172,15 @@
                         <span
                                 class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                 style="white-space: nowrap;">Preorder</span>
+                        @endif
+                        @if($detail_data->user->is_verified == 1)
+                        <span
+                                class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                style="white-space: nowrap;">Verified</span>
+                        @else
+                        <span
+                                class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                style="white-space: nowrap;">Unverified</span>
                         @endif
                     @endif
 
@@ -705,6 +725,15 @@
                                             class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">Preorder</span>
                                         @endif
+                                        @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                         </div>
                                     </div>
                                 </div>
@@ -824,6 +853,15 @@
                                             class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">Preorder</span>
                                         @endif
+                                        @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                         </div>
                                     </div>
                                 </div>
@@ -930,6 +968,20 @@
                                                 class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
                                                 style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                         @endforeach
+                                        @if($item->is_readystock == 0)
+                                            <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                        @endif
+                                        @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                     </div>
                                 </div>
                                 </Link>
@@ -1036,6 +1088,20 @@
                                                 class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
                                                 style="white-space: nowrap;">{{ $work_unit->name }}</span>
                                         @endforeach
+                                        @if($item->is_readystock == 0)
+                                            <span
+                                            class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Preorder</span>
+                                        @endif
+                                        @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                     </div>
                                 </div>
                                 </Link>

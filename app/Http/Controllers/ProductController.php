@@ -50,13 +50,13 @@ class ProductController extends Controller
             return view('products.index', [
                 'products' => SpladeTable::for($products)
                     ->defaultSort('name')
-                    ->column('name', sortable: true, searchable: true)
+                    ->column('name', 'Nama', sortable: true, searchable: true)
                     ->withGlobalSearch(columns: ['name'])
-                    ->column('image')
-                    ->column('product_category.name', sortable: true, searchable: true)
-                    ->column('is_selected', sortable: true, searchable: true)
-                    ->column('user.name', sortable: true, searchable: true)
-                    ->column('admin_category.name', sortable: true, searchable: true)
+                    ->column('image', 'Gambar')
+                    ->column('product_category.name', 'Kategori produk', sortable: true, searchable: true)
+                    ->column('is_selected', 'pilihan', sortable: true, searchable: true)
+                    ->column('user.name', 'owner', sortable: true, searchable: true)
+                    ->column('admin_category.name', 'admin kategori', sortable: true, searchable: true)
                     ->selectFilter('product_category_id', $categories)
                     ->column('action')
                 ,
@@ -106,7 +106,11 @@ class ProductController extends Controller
             '0' => 'Pre Order',
             '1' => 'Ready Stock',
         ];
-        return view('products.create', compact('product_categories', 'work_units', 'is_selected', 'admin_categories', 'admin_promotion_categories', 'price_type', 'is_readystock'));
+        $is_public = [
+            '0' => 'Hanya Civitas ITB',
+            '1' => 'Publik',
+        ];
+        return view('products.create', compact('product_categories', 'work_units', 'is_selected', 'admin_categories', 'admin_promotion_categories', 'price_type', 'is_readystock', 'is_public'));
     }
 
     /**
@@ -125,6 +129,7 @@ class ProductController extends Controller
             'is_selected' => 'required',
             'price_type' => 'required|numeric',
             'is_readystock' => 'required|numeric',
+            'is_public' => 'required|numeric',
         ])->validate();
 
         $fileName = "img-product-" . $request->file('image')->hashName();
@@ -184,6 +189,7 @@ class ProductController extends Controller
             'price_type' => $request->price_type,
             'is_selected' => $request->is_selected,
             'is_readystock' => $request->is_readystock,
+            'is_public' => $request->is_public,
             'slug' => $slug,
             'external_link' => $request->external_link,
         ]);
@@ -204,7 +210,7 @@ class ProductController extends Controller
 
         $product->work_units()->attach($request->work_units);
 
-        Toast::title('Product was created!')->autoDismiss(5);
+        Toast::title('Produk berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('products.index');
     }
@@ -245,6 +251,10 @@ class ProductController extends Controller
                 '0' => 'Pre Order',
                 '1' => 'Ready Stock',
             ],
+            'is_public' => [
+                '0' => 'Hanya Civitas ITB',
+                '1' => 'Publik',
+            ],
             'admin_categories' => $admin_categories,
             'admin_promotion_categories' => $admin_promotion_categories,
         ]);
@@ -266,6 +276,7 @@ class ProductController extends Controller
             // 'is_selected' => 'required',
             'price_type' => 'required|numeric',
             'is_readystock' => 'required|numeric',
+            'is_public' => 'required|numeric',
         ])->validate();
 
         if ($request->file('image')) {
@@ -340,6 +351,7 @@ class ProductController extends Controller
             'price_type' => $request->price_type,
             'is_selected' => $is_selected,
             'is_readystock' => $request->is_readystock,
+            'is_public' => $request->is_public,
             'slug' => $slug,
             'external_link' => $request->external_link,
         ]);
@@ -370,7 +382,7 @@ class ProductController extends Controller
             }
         }
 
-        Toast::title('Product was updated!')->autoDismiss(5);
+        Toast::title('Produk berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('products.index');
     }
@@ -405,7 +417,7 @@ class ProductController extends Controller
 
         $product->work_units()->detach();
         $product->delete();
-        Toast::title('Product was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Produk berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('products.index');
     }

@@ -1,14 +1,14 @@
-@seoTitle(__('Product Management'))
+@seoTitle(__('Kelola Produk'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Product Management') }}
+                {{ __('Kelola Produk') }}
             </h2>
             <a href="{{ route('products.create') }}"
-                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Create
-                Product
+                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Tambah
+                Produk
             </a>
         </div>
         </x-slot>
@@ -31,7 +31,7 @@
                         confirm="Delete Product" confirm-text="Are you sure you want to delete product?"
                         confirm-button="Yes" cancel-button="No">
                         <x-splade-button
-                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                     @endcell
                 </x-splade-table>

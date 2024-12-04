@@ -36,6 +36,7 @@ class Product extends Model
         'image_real',
         'external_link',
         'admin_promotion_category_id',
+        'is_public',
     ];
 
     // protected $casts = [

@@ -43,6 +43,9 @@ class User extends Authenticatable
         'partner_approval_date',
         'is_selected',
         'is_verified',
+        'unique_id',
+        'community_id',
+        'is_public',
     ];
 
     /**
@@ -84,4 +87,10 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\City', 'id', 'city_id');
     }
+
+    public function community()
+    {
+        return $this->hasOne('App\Models\Community', 'id', 'community_id');
+    }
+    
 }

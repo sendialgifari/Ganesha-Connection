@@ -88,7 +88,7 @@ class ServiceCategoryController extends Controller
             'is_selected' => $request->is_selected,
         ]);
 
-        Toast::title('Service Category was created!')->autoDismiss(5);
+        Toast::title('Kategori jasa berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('service_categories.index');
     }
@@ -152,7 +152,7 @@ class ServiceCategoryController extends Controller
             'is_selected' => $request->is_selected,
         ]);
 
-        Toast::title('Service Category was updated!')->autoDismiss(5);
+        Toast::title('Kategori jasa berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('service_categories.index');
     }
@@ -197,7 +197,7 @@ class ServiceCategoryController extends Controller
         } catch (\Throwable $th) {
         }
         $service_category->delete();
-        Toast::title('Service Category was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Kategori jasa berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('service_categories.index');
     }

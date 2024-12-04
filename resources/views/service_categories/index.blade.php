@@ -1,14 +1,13 @@
-@seoTitle(__('Service Categories Management'))
+@seoTitle(__('Kelola Kategori Jasa'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Service Categories Management') }}
+                {{ __('Kelola Kategori Jasa') }}
             </h2>
             <x-splade-link href="{{ route('service_categories.create') }}"
-                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Create
-                Service Categories
+                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Tambah Kategori Jasa
             </x-splade-link>
         </div>
         </x-slot>
@@ -29,7 +28,7 @@
                         confirm-text="Are you sure you want to delete service category?" confirm-button="Yes"
                         cancel-button="No">
                         <x-splade-button
-                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                     @endcell
                 </x-splade-table>

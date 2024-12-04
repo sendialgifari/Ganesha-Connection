@@ -1,15 +1,15 @@
-@seoTitle(__('Service Management'))
+@seoTitle(__('Tambah Jasa'))
 
 <x-app-layout>
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Service') }}
+            {{ __('Tambah Jasa') }}
         </h2>
     </x-slot>
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <x-splade-form class="space-y-4" action="{{ route('services.store') }}" :default="['admin_category_id' => '0', 'admin_promotion_category_id' => '0', 'is_selected' => '0', 'is_readystock' => '1', 'price_type' => '0']">
+            <x-splade-form class="space-y-4" action="{{ route('services.store') }}" :default="['is_public' => '1', 'admin_category_id' => '0', 'admin_promotion_category_id' => '0', 'is_selected' => '0', 'is_readystock' => '1', 'price_type' => '0']">
                 <x-splade-select name="service_category_id" label="Kategori jasa" :options="$service_categories" />
                 @if(auth()->user()->getRoleNames()[0] == "admin" || auth()->user()->getRoleNames()[0] == "superadmin")
                 <x-splade-radios name="is_selected" label="Jasa pilihan" :options="$is_selected" />
@@ -36,6 +36,7 @@
                     min-size="10KB" max-size="2MB" />
                 {{-- <img src="{{ url('storage/services/'.$service->image) }}" alt="" title="" /> --}}
                 <x-splade-select name="work_units[]" label="Unit kerja" :options="$work_units" multiple relation choices />
+                <x-splade-radios name="is_public" label="Tampilkan Jasa" :options="$is_public" />
                 <x-splade-submit label="Save" />
             </x-splade-form>
         </div>

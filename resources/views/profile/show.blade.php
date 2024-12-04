@@ -1,9 +1,9 @@
-@seoTitle(__('Profile'))
+@seoTitle(__('Profil'))
 
 <x-app-layout>
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
+            {{ __('Profil') }}
         </h2>
     </x-slot>
 
@@ -22,15 +22,15 @@
             <x-section-border />
         @endif
 
-        @if(Laravel\Fortify\Features::canManageTwoFactorAuthentication())
+        {{-- @if(Laravel\Fortify\Features::canManageTwoFactorAuthentication())
             <div class="mt-10 sm:mt-0" dusk="two-factor-authentication-form">
                 @include('profile.two-factor-authentication-form')
             </div>
 
             <x-section-border />
-        @endif
+        @endif --}}
 
-        <div class="mt-10 sm:mt-0" dusk="logout-other-browser-sessions-form">
+        {{-- <div class="mt-10 sm:mt-0" dusk="logout-other-browser-sessions-form">
             @include('profile.logout-other-browser-sessions-form')
         </div>
 
@@ -40,6 +40,6 @@
             <div class="mt-10 sm:mt-0" dusk="delete-user-form">
                 @include('profile.delete-user-form')
             </div>
-        @endif
+        @endif --}}
     </div>
 </x-app-layout>

@@ -1,14 +1,14 @@
-@seoTitle(__('Static Page Management'))
+@seoTitle(__('Kelola Halaman Statis'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Static Page Management') }}
+                {{ __('Kelola Halaman Statis') }}
             </h2>
             <x-splade-link href="{{ route('static_pages.create') }}"
-                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Create
-                Static Page
+                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Tambah
+                Halaman Statis
             </x-splade-link>
         </div>
     </x-slot>
@@ -26,7 +26,7 @@
                     <x-splade-form action="{{ route('static_pages.destroy', $static_page) }}" method="delete"
                         confirm="Delete Static Page" confirm-text="Are you sure you want to delete static page?"
                         confirm-button="Yes" cancel-button="No">
-                        <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                        <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                 @endcell
             </x-splade-table>

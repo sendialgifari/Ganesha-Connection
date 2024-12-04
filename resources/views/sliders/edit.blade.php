@@ -1,4 +1,4 @@
-@seoTitle(__('Slider Management'))
+@seoTitle(__('Edit Slider'))
 
 <x-app-layout>
     <x-slot:header>
@@ -11,10 +11,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <x-splade-form class="space-y-4" action="{{ route('sliders.update', $slider) }}" method="put"
                 :default="$slider">
-                <x-splade-input name="name" label="Name" />
-                <x-splade-input name="url" label="url" />
-                <x-splade-textarea name="description" label="description" />
-                <x-splade-file name="image" label="Image" :show-filename="false" filepond preview />
+                <x-splade-input name="name" label="Nama" />
+                <x-splade-input name="url" label="Url" />
+                <x-splade-textarea name="description" label="Deskripsi" />
+                <x-splade-file name="image" label="Gambar" :show-filename="false" filepond preview />
                 <x-splade-submit label="Update" />
             </x-splade-form>
         </div>

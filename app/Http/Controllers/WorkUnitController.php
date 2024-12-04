@@ -67,7 +67,7 @@ class WorkUnitController extends Controller
             'slug' => $slug,
         ]);
 
-        Toast::title('Work Unit was created!')->autoDismiss(5);
+        Toast::title('Unit kerja berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('work_units.index');
     }
@@ -113,7 +113,7 @@ class WorkUnitController extends Controller
             'slug' => $slug,
         ]);
 
-        Toast::title('Work Unit was updated!')->autoDismiss(5);
+        Toast::title('Unit kerja berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('work_units.index');
     }
@@ -124,7 +124,7 @@ class WorkUnitController extends Controller
     public function destroy(WorkUnit $work_unit)
     {
         $work_unit->delete();
-        Toast::title('Work Unit was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Unit kerja berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('work_units.index');
     }

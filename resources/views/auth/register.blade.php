@@ -6,10 +6,10 @@
     </x-slot>
 
     <x-splade-form class="space-y-4">
-        <x-splade-input id="name" name="name" :label="__('Name')" required autofocus />
+        <x-splade-input id="name" name="name" :label="__('Nama')" required autofocus />
         <x-splade-input id="email" name="email" type="email" :label="__('Email')" required />
         <x-splade-input id="password" name="password" type="password" :label="__('Password')" required autocomplete="new-password" />
-        <x-splade-input id="password_confirmation" name="password_confirmation" type="password" :label="__('Confirm Password')" required autocomplete="new-password" />
+        <x-splade-input id="password_confirmation" name="password_confirmation" type="password" :label="__('Konfirmasi Password')" required autocomplete="new-password" />
 
         @if(\Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
             <x-splade-checkbox name="terms">

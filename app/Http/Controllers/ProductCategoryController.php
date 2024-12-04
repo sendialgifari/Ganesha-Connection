@@ -88,7 +88,7 @@ class ProductCategoryController extends Controller
             'is_selected' => $request->is_selected,
         ]);
 
-        Toast::title('Product Category was created!')->autoDismiss(5);
+        Toast::title('Kategori produk berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('product_categories.index');
     }
@@ -152,7 +152,7 @@ class ProductCategoryController extends Controller
             'is_selected' => $request->is_selected,
         ]);
 
-        Toast::title('Product Category was updated!')->autoDismiss(5);
+        Toast::title('Kategori produk berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('product_categories.index');
     }
@@ -197,7 +197,7 @@ class ProductCategoryController extends Controller
         } catch (\Throwable $th) {
         }
         $product_category->delete();
-        Toast::title('Product Category was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Kategori produk berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('product_categories.index');
     }

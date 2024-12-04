@@ -1,14 +1,14 @@
-@seoTitle(__('Product Categories Management'))
+@seoTitle(__('Kelola Kategori Produk'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Product Categories Management') }}
+                {{ __('Kelola Kategori Produk') }}
             </h2>
             <x-splade-link href="{{ route('product_categories.create') }}"
-                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Create
-                Product Categories
+                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Tambah
+                Kategori Produk
             </x-splade-link>
         </div>
     </x-slot>
@@ -27,7 +27,7 @@
                     <x-splade-form action="{{ route('product_categories.destroy', $product_category) }}" method="delete"
                         confirm="Delete Product Category" confirm-text="Are you sure you want to delete product category?"
                         confirm-button="Yes" cancel-button="No">
-                        <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                        <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                 @endcell
             </x-splade-table>

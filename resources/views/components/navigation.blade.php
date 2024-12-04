@@ -19,10 +19,10 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
 
                         {{-- <x-nav-link :href="route('service_categories.index')" :active="request()->routeIs('service_categories.index')">
-                            {{ __('Service Categories') }}
+                            {{ __('Kategori Jasa') }}
                         </x-nav-link>
                         <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                            {{ __('Service') }}
+                            {{ __('Jasa') }}
                         </x-nav-link> --}}
                         @role('superadmin')
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
@@ -33,15 +33,15 @@
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('service_categories.index') ||
                                             request()->routeIs('services.index')">
-                                        {{ __('Services') }}
+                                        {{ __('Jasa') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('service_categories.index')">
-                                        {{ __('Service Categories') }}
+                                        {{ __('Kategori Jasa') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('services.index')">
-                                        {{ __('Services') }}
+                                        {{ __('Jasa') }}
                                         </x-nav-link>
                                 </div>
                             </x-splade-dropdown>
@@ -50,83 +50,83 @@
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('product_categories.index') ||
                                             request()->routeIs('products.index')">
-                                        {{ __('Products') }}
+                                        {{ __('Produk') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('product_categories.index')">
-                                        {{ __('Product Categories') }}
+                                        {{ __('Kategori Produk') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('products.index')">
-                                        {{ __('Products') }}
+                                        {{ __('Produk') }}
                                         </x-nav-link>
                                 </div>
                             </x-splade-dropdown>
                             <x-nav-link :href="route('work_units.index')" :active="request()->routeIs('work_units.index')">
-                                {{ __('Units') }}
+                                {{ __('Unit') }}
                             </x-nav-link>
                             <x-nav-link :href="route('sliders.index')" :active="request()->routeIs('sliders.index')">
-                                {{ __('Sliders') }}
+                                {{ __('Slider') }}
                             </x-nav-link>
                             <x-splade-dropdown>
                                 <x-slot:trigger>
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('product_comments.index') ||
                                             request()->routeIs('service_comments.index')">
-                                        {{ __('Comments') }}
+                                        {{ __('Komentar') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('product_comments.index')">
-                                        {{ __('Product Comments') }}
+                                        {{ __('Komentar Produk') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('service_comments.index')">
-                                        {{ __('Service Comments') }}
+                                        {{ __('Komentar Jasa') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
                             <x-nav-link :href="route('visitors')" :active="request()->routeIs('visitors')">
-                                {{ __('Visitors') }}
+                                {{ __('Pengunjung') }}
                             </x-nav-link>
                             <x-splade-dropdown>
                                 <x-slot:trigger>
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('users.index') ||
                                             request()->routeIs('partner_approval')">
-                                        {{ __('Users') }}
+                                        {{ __('User') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('users.index')">
-                                        {{ __('User List') }}
+                                        {{ __('Daftar User') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('partner_approval')">
-                                        {{ __('Partner Approval') }}
+                                        {{ __('Verifikasi Partner') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
                             <x-nav-link :href="route('static_pages.index')" :active="request()->routeIs('static_pages.index')">
-                                {{ __('Pages') }}
+                                {{ __('Halaman') }}
                             </x-nav-link>
                             <x-splade-dropdown>
                                 <x-slot:trigger>
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('admin_categories.index') ||
                                             request()->routeIs('admin_promotion_categories.index')">
-                                        {{ __('Admin Categories') }}
+                                        {{ __('Kategori Admin') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('admin_categories.index')">
-                                        {{ __('Admin Categories 1') }}
+                                        {{ __('Kategori Admin') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('admin_promotion_categories.index')">
-                                        {{ __('Admin Categories 2') }}
+                                        {{ __('Kategori Admin 2') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
                             {{-- <x-nav-link :href="route('admin_categories.index')" :active="request()->routeIs('admin_categories.index')">
-                                {{ __('Admin Categories') }}
+                                {{ __('Kategori Admin') }}
                             </x-nav-link> --}}
                         @endrole
                         @role('admin')
@@ -138,15 +138,15 @@
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('service_categories.index') ||
                                             request()->routeIs('services.index')">
-                                        {{ __('Services') }}
+                                        {{ __('Jasa') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('service_categories.index')">
-                                        {{ __('Service Categories') }}
+                                        {{ __('Kategori Jasa') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('services.index')">
-                                        {{ __('Services') }}
+                                        {{ __('Jasa') }}
                                         </x-nav-link>
                                 </div>
                             </x-splade-dropdown>
@@ -155,63 +155,63 @@
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('product_categories.index') ||
                                             request()->routeIs('products.index')">
-                                        {{ __('Products') }}
+                                        {{ __('Produk') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('product_categories.index')">
-                                        {{ __('Product Categories') }}
+                                        {{ __('Kategori Produk') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('products.index')">
-                                        {{ __('Products') }}
+                                        {{ __('Produk') }}
                                         </x-nav-link>
                                 </div>
                             </x-splade-dropdown>
                             <x-nav-link :href="route('work_units.index')" :active="request()->routeIs('work_units.index')">
-                                {{ __('Units') }}
+                                {{ __('Unit') }}
                             </x-nav-link>
                             <x-nav-link :href="route('sliders.index')" :active="request()->routeIs('sliders.index')">
-                                {{ __('Sliders') }}
+                                {{ __('Slider') }}
                             </x-nav-link>
                             <x-splade-dropdown>
                                 <x-slot:trigger>
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('product_comments.index') ||
                                             request()->routeIs('service_comments.index')">
-                                        {{ __('Comments') }}
+                                        {{ __('Komentar') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('product_comments.index')">
-                                        {{ __('Product Comments') }}
+                                        {{ __('Komentar Produk') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('service_comments.index')">
-                                        {{ __('Service Comments') }}
+                                        {{ __('Komentar Jasa') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
                             <x-nav-link :href="route('visitors')" :active="request()->routeIs('visitors')">
-                                {{ __('Visitors') }}
+                                {{ __('Pengunjung') }}
                             </x-nav-link>
                             <x-splade-dropdown>
                                 <x-slot:trigger>
                                     <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
                                         :active="request()->routeIs('users.index') ||
                                             request()->routeIs('partner_approval')">
-                                        {{ __('Users') }}
+                                        {{ __('User') }}
                                     </x-nav-link>
                                 </x-slot>
                                 <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                     <x-dropdown-link :href="route('users.index')">
-                                        {{ __('User List') }}
+                                        {{ __('Daftar User') }}
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('partner_approval')">
-                                        {{ __('Partner Approval') }}
+                                        {{ __('Verifikasi Partner') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
                             <x-nav-link :href="route('static_pages.index')" :active="request()->routeIs('static_pages.index')">
-                                {{ __('Pages') }}
+                                {{ __('Halaman') }}
                             </x-nav-link>
                             {{-- <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
                                 {{ __('Roles') }}
@@ -222,10 +222,10 @@
                                 {{ __('Dashboard') }}
                             </x-nav-link>
                             <x-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                                {{ __('Services') }}
+                                {{ __('Jasa') }}
                             </x-nav-link>
                             <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                                {{ __('Products') }}
+                                {{ __('Produk') }}
                             </x-nav-link>
                         @endrole
                         @role('user')
@@ -327,11 +327,11 @@
                             <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
                                 <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                    {{ __('Manage Account') }}
+                                    {{ __('Kelola Akun') }}
                                 </div>
 
                                 <x-dropdown-link :href="route('profile.show')">
-                                    {{ __('Profile') }}
+                                    {{ __('Profil') }}
                                 </x-dropdown-link>
 
                                 {{-- @if (\Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -380,49 +380,49 @@
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('service_categories.index')" :active="request()->routeIs('service_categories.index')">
-                        {{ __('Service Categories') }}
+                        {{ __('Kategori Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                        {{ __('Service') }}
+                        {{ __('Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('product_categories.index')" :active="request()->routeIs('product_categories.index')">
-                        {{ __('Product Categories') }}
+                        {{ __('Kategori Produk') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                        {{ __('Products') }}
+                        {{ __('Produk') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('work_units.index')" :active="request()->routeIs('work_units.index')">
-                        {{ __('Units') }}
+                        {{ __('Unit') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('sliders.index')" :active="request()->routeIs('sliders.index')">
-                        {{ __('Sliders') }}
+                        {{ __('Slider') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('product_comments.index')" :active="request()->routeIs('product_comments.index')">
-                        {{ __('Product Comments') }}
+                        {{ __('Komentar Produk') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('service_comments.index')" :active="request()->routeIs('service_comments.index')">
-                        {{ __('Service Comments') }}
+                        {{ __('Komentar Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('visitors')" :active="request()->routeIs('visitors')">
-                        {{ __('Visitors') }}
+                        {{ __('Pengunjung') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                        {{ __('Users') }}
+                        {{ __('User') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('partner_approval')" :active="request()->routeIs('partner_approval')">
-                        {{ __('Partner Approval') }}
+                        {{ __('Verifikasi Partner') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('static_pages.index')" :active="request()->routeIs('static_pages.index')">
-                        {{ __('Pages') }}
+                        {{ __('Halaman') }}
                     </x-responsive-nav-link>
                     {{-- <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
                         {{ __('Roles') }}
                     </x-responsive-nav-link> --}}
                     <x-responsive-nav-link :href="route('admin_categories.index')" :active="request()->routeIs('admin_categories.index')">
-                        {{ __('Admin Categories') }}
+                        {{ __('Kategori Admin') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin_promotion_categories.index')" :active="request()->routeIs('admin_promotion_categories.index')">
-                        {{ __('Admin Categories 2') }}
+                        {{ __('Kategori Admin 2') }}
                     </x-responsive-nav-link>
                 @endrole
                 @role('admin')
@@ -430,40 +430,40 @@
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('service_categories.index')" :active="request()->routeIs('service_categories.index')">
-                        {{ __('Service Categories') }}
+                        {{ __('Kategori Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                        {{ __('Service') }}
+                        {{ __('Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('product_categories.index')" :active="request()->routeIs('product_categories.index')">
-                        {{ __('Product Categories') }}
+                        {{ __('Kategori Produk') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                        {{ __('Products') }}
+                        {{ __('Produk') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('work_units.index')" :active="request()->routeIs('work_units.index')">
-                        {{ __('Units') }}
+                        {{ __('Unit') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('sliders.index')" :active="request()->routeIs('sliders.index')">
-                        {{ __('Sliders') }}
+                        {{ __('Slider') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('product_comments.index')" :active="request()->routeIs('product_comments.index')">
-                        {{ __('Product Comments') }}
+                        {{ __('Komentar Produk') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('service_comments.index')" :active="request()->routeIs('service_comments.index')">
-                        {{ __('Service Comments') }}
+                        {{ __('Komentar Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('visitors')" :active="request()->routeIs('visitors')">
-                        {{ __('Visitors') }}
+                        {{ __('Pengunjung') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                        {{ __('Users') }}
+                        {{ __('User') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('partner_approval')" :active="request()->routeIs('partner_approval')">
-                        {{ __('Partner Approval') }}
+                        {{ __('Verifikasi Partner') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('static_pages.index')" :active="request()->routeIs('static_pages.index')">
-                        {{ __('Pages') }}
+                        {{ __('Halaman') }}
                     </x-responsive-nav-link>
                     {{-- <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
                         {{ __('Roles') }}
@@ -474,10 +474,10 @@
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('services.index')" :active="request()->routeIs('services.index')">
-                        {{ __('Services') }}
+                        {{ __('Jasa') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                        {{ __('Products') }}
+                        {{ __('Produk') }}
                     </x-responsive-nav-link>
                 @endrole
                 @role('user')

@@ -1,8 +1,9 @@
 <x-main-layout>
 
+    <div class="carousel">
     <x-splade-lazy>
         <x-slot:placeholder> 
-            <img class="rounded-lg my-4" style="width: 100%; max-height: 340px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;" /> 
+            <img class="rounded-lg my-4" style="width: 100%; max-height: 340px;height: calc(100vw - 72vw); object-fit: cover; background-color: #c6c6c6;" /> 
         </x-slot:placeholder>
         {{-- @if (count($sliders) === 1)
             <Carousel class="py-4">
@@ -17,11 +18,11 @@
                 </x-splade-lazy>
             </Carousel>
         @else --}}
-        <Carousel :autoplay="5000" :wrap-around="true" class="py-4">
+        <Carousel :autoplay="5000" :wrap-around="true" class="py-4 carousel-slider">
             @foreach ($sliders as $key => $slider)
                 <CarouselSlide key="{{ $key }}">
-                    <img class="rounded-lg" style="width: 100%; max-height: 340px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;"
-                        src="{{ $slider->image }}">
+                    <img class="rounded-lg" style=" max-height: 340px;height: calc(100vw - 72vw); object-fit: cover; background-color: #c6c6c6;"
+                        src="{{ $slider->image }}" alt="ganesha connection slider">
                 </CarouselSlide>
             @endforeach
             <template #addons>
@@ -31,6 +32,7 @@
         </Carousel>
         {{-- @endif --}}
     </x-splade-lazy>
+    </div>
 
     <section class="grid gap-2 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
         <div class="rounded-lg p-4 bg-white dark:bg-gray-900 antialiased">
@@ -70,10 +72,10 @@
                             </div>
                         </div>
                     </x-slot:placeholder> --}}
-                    <div class="container">
+                    <div class="scroll-container no-scrollbar">
                         @foreach ($product_categories_selected as $idx => $item)
                             <Link href="/search?type=produk&cat={{ $item->id }}" id="{{ $idx }}-product">
-                            <div class="home-category">
+                            <div class="home-category" style="white-space: initial;">
                                 <div class="home-category-pic align-top">
                                     <img src="{{ $item->image }}" alt="{{ $item->name }}"
                                         onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
@@ -88,7 +90,7 @@
                             </Link>
                             @if ($loop->last)
                             <Link href="/search?type=produk">
-                            <div class="home-category align-top">
+                            <div class="home-category align-top" style="white-space: initial;">
                                 <div class="home-category-pic">
                                     <img src="{{ asset('/images/apps.png') }}" alt="more"/>
                                 </div>
@@ -143,10 +145,10 @@
                             </div>
                         </div>
                     </x-slot:placeholder> --}}
-                    <div class="container">
+                    <div class="scroll-container no-scrollbar">
                         @foreach ($service_categories_selected as $idx => $item)
                             <Link href="/search?type=jasa&cat={{ $item->id }}" id="{{ $idx }}-service">
-                            <div class="home-category align-top">
+                            <div class="home-category align-top" style="white-space: initial;">
                                 <div class="home-category-pic">
                                     <img src="{{ $item->image }}" alt="{{ $item->name }}"
                                         onerror="this.onerror=null; this.src='{{ asset('/images/default.png') }}'" />
@@ -161,7 +163,7 @@
                             </Link>
                             @if ($loop->last)
                             <Link href="/search?type=jasa">
-                            <div class="home-category align-top">
+                            <div class="home-category align-top" style="white-space: initial;">
                                 <div class="home-category-pic">
                                     <img src="{{ asset('/images/apps.png') }}" alt="more"/>
                                 </div>
@@ -189,7 +191,7 @@
                     </div>
                 </div> --}}
 
-                    <div class="container">
+                    <div class="scroll-container no-scrollbar">
                         @foreach ($admin_promotion_categories as $idx => $item)
                             <Link href="/search?adm_p_cat={{ $item->id }}">
                             <div class="partner-pilihan rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -200,7 +202,7 @@
                                 </div>
                                 <div class="pt-1">
                                     <p
-                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px;">
+                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px; white-space: initial;">
                                         {{ $item->name }}</p>
                                 </div>
                             </div>
@@ -216,7 +218,7 @@
                                 </div>
                                 <div class="pt-1">
                                     <p
-                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px;">
+                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px; white-space: initial;">
                                         {{ $item->name }}</p>
                                 </div>
                             </div>
@@ -256,7 +258,7 @@
                                         </div>
                                     @endif
                                     @if ($item->admin_promotion_category)
-                                        <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag" style="bottom:0">
+                                        <img src="{{ $item->admin_promotion_category->image }}" alt="admin-category-promo-tag" class="admin-category-promo-tag" style="bottom:0">
                                     @endif                                    
                                     <img class="mx-auto rounded-top h-full"
                                         src="{{ $item->image_thumb }}" style="width: 100%; max-height: 150px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;"
@@ -269,7 +271,7 @@
                                         <div class="tag-product">{{ $item->admin_category->name }}
                                         </div>
                                     @endif
-                                    <div class="pt-1 p-2">
+                                    <div class="pt-1 p-2" style="white-space:initial;">
                                     <p class="line-clamp-2 text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
                                         {{ $item->name }}</p>
 
@@ -326,6 +328,15 @@
                                             
                                         </p>
                                     </div>
+                                    @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                     @foreach ($item->work_units as $work_unit)
                                         <span
                                             class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
@@ -336,6 +347,7 @@
                                             class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">Preorder</span>
                                     @endif
+                                    
                                     </div>
                                 </div>
                             </div>
@@ -384,7 +396,7 @@
                                         </div>
                                     @endif
                                     @if ($item->admin_promotion_category)
-                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" class="admin-category-promo-tag" style="bottom:0"/>
+                                        <img src="{{ $item->admin_promotion_category->image }}" class="mt-1" alt="admin-category-promo-tag" class="admin-category-promo-tag" style="bottom:0"/>
                                     @endif
                                     <img class="mx-auto rounded-top h-full"
                                         src="{{ $item->image_thumb }}" style="width: 100%; max-height: 150px;height: calc(100vw - 56vw); object-fit: cover; background-color: #c6c6c6;"
@@ -397,7 +409,7 @@
                                         <div class="tag-product">{{ $item->admin_category->name }}
                                         </div>
                                     @endif
-                                    <div class="pt-1 p-2" >
+                                    <div class="pt-1 p-2" style="white-space:initial;">
                                     <p
                                         class="text-md font-semibold leading-tight text-gray-900 hover:underline dark:text-white pb-1" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 1.5rem;max-height: 3rem;white-space: initial;font-size: 14px">
                                         {{ $item->name }}</p>
@@ -454,6 +466,15 @@
 
                                         </p>
                                     </div>
+                                    @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                     @foreach ($item->work_units as $work_unit)
                                         <span
                                             class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
@@ -464,6 +485,7 @@
                                             class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">Preorder</span>
                                     @endif
+                                    
 
                                     </div>
                                 </div>
@@ -555,7 +577,7 @@
                         </div>
                     </x-slot:placeholder> --}}
 
-                    <div class="container">
+                    <div class="scroll-container no-scrollbar">
                         @foreach ($partner_selected as $idx => $item)
                             <Link href="/partner/{{ $item->slug }}">
                             <div class="partner-pilihan rounded-full shadow-sm dark:border-gray-700 dark:bg-gray-800">
@@ -567,7 +589,7 @@
                                 </div>
                                 <div class="pt-1">
                                     <p
-                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px;">
+                                        class="text-md text-center leading-tight text-gray-900 hover:underline dark:text-white" style="font-size: 12px; white-space:initial;">
                                         {{ $item->name }}</p>
                                 </div>
                             </div>
@@ -632,7 +654,7 @@
                             </div>
                             <div style="height: 180px;">
                                     @if ($item->admin_promotion_category)
-                                        <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag" />
+                                        <img src="{{ $item->admin_promotion_category->image }}" alt="admin-category-promo-tag" class="admin-category-promo-tag" />
                                     @endif
                                     @if ($item->admin_category)
                                         <div class="tag-product">{{ $item->admin_category->name }}
@@ -694,6 +716,15 @@
 
                                         </p>
                                     </div>
+                                    @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                    @endif
                                     @foreach ($item->work_units as $work_unit)
                                         <span
                                             class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
@@ -704,6 +735,7 @@
                                             class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">Preorder</span>
                                     @endif
+                                    
 
                                 </div>
                             </div>
@@ -760,7 +792,7 @@
                             </div>
                             <div style="height : 180px">
                                 @if ($item->admin_promotion_category)
-                                    <img src="{{ $item->admin_promotion_category->image }}" class="admin-category-promo-tag">
+                                    <img src="{{ $item->admin_promotion_category->image }}" alt="admin-category-promo-tag" class="admin-category-promo-tag">
                                 @endif
                                 @if ($item->admin_category)
                                     <div class="tag-product">{{ $item->admin_category->name }}
@@ -821,6 +853,15 @@
 
                                     </p>
                                 </div>
+                                @if($item->user->is_verified == 1)
+                                    <span
+                                            class="bg-green-100 text-green-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Verified</span>
+                                    @else
+                                    <span
+                                            class="bg-gray-100 text-gray-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                                            style="white-space: nowrap;">Unverified</span>
+                                @endif
                                 @foreach ($item->work_units as $work_unit)
                                     <span
                                         class="bg-blue-100 text-blue-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
@@ -830,7 +871,8 @@
                                     <span
                                             class="bg-red-100 text-red-800 inline-block text-xs font-medium me-2 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300"
                                             style="white-space: nowrap;">Preorder</span>
-                                    @endif
+                                @endif
+                                
 
                                 </div>
                             </div>

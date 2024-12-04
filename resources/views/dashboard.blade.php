@@ -17,7 +17,7 @@
                             <div>
                                 <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
                                     {{ number_format($total_users_chart, 0, ',', '.') }}</h5>
-                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">New users this week</p>
+                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">User baru minggu ini</p>
                             </div>
                             {{-- <div
                             class="flex items-center px-2.5 py-0.5 text-base font-semibold text-red-500 dark:text-red-500 text-center">
@@ -39,7 +39,7 @@
                                     data-dropdown-placement="bottom"
                                     class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
                                     type="button">
-                                    Last 7 days
+                                    7 hari terakhir
                                     {{-- <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -78,7 +78,7 @@
                             </div> --}}
                                 <x-nav-link :href="route('users.index')"
                                     class="pt-2 uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                                    Data Users
+                                    Data User
                                     <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -94,7 +94,7 @@
                             <div>
                                 <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">
                                     {{ number_format($total_traffics_chart, 0, ',', '.') }}</h5>
-                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Traffic this week</p>
+                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Trafik Pengunjung Hari ini</p>
                             </div>
                             {{-- <div
                             class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
@@ -115,7 +115,7 @@
                                     data-dropdown-placement="bottom"
                                     class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
                                     type="button">
-                                    Last 7 days
+                                    7 hari terakhir
                                     {{-- <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -154,7 +154,7 @@
                             </div> --}}
                                 <x-nav-link :href="route('visitors')"
                                     class="pt-2 uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                                    Data Visitors
+                                    Data Pengunjung
                                     <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -170,12 +170,9 @@
                             <div class="flex-col items-center">
                                 <div class="flex items-center mb-1">
                                     <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">
-                                        Website
-                                        traffic</h5>
-
+                                        Trafik Website</h5>
                                 </div>
-                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Website traffic by
-                                    platform this week</p>
+                                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Trafik situs web menurut platform minggu ini</p>
                             </div>
 
                         </div>
@@ -192,7 +189,7 @@
                                     data-dropdown-placement="bottom"
                                     class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
                                     type="button">
-                                    Last 7 days
+                                    7 hari terakhir
                                     {{-- <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -230,7 +227,7 @@
                             </div> --}}
                                 <x-nav-link :href="route('visitors')"
                                     class="pt-2 uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
-                                    Data Visitors
+                                    Data Pengunjung
                                     <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

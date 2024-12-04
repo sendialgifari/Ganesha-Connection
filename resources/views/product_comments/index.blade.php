@@ -1,10 +1,10 @@
-@seoTitle(__('Product Comment Management'))
+@seoTitle(__('Kelola Komentar Produk'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Product Comment Management') }}
+                {{ __('Kelola Komentar Produk') }}
             </h2>
         </div>
         </x-slot>
@@ -21,7 +21,7 @@
                         confirm="Delete Product Comment" confirm-text="Are you sure you want to delete product comment?"
                         confirm-button="Yes" cancel-button="No">
                         <x-splade-button
-                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                     @endcell
                 </x-splade-table>

@@ -7,18 +7,18 @@
 >
     <x-form-section dusk="update-profile-information-form">
         <x-slot:title>
-            {{ __('Profile Information') }}
+            {{ __('Informasi Profil') }}
         </x-slot>
 
         <x-slot:description>
-            {{ __('Update your account\'s profile information and email address.') }}
+            {{ __('Perbarui informasi profil akun dan alamat email Anda.') }}
         </x-slot>
 
         <x-slot:form>
             <!-- Profile Photo -->
             @if(Laravel\Jetstream\Jetstream::managesProfilePhotos())
                 <div class="col-span-6 sm:col-span-4">
-                    <span class="block mb-1 text-gray-700 font-sans">{{ __('Photo') }}</span>
+                    <span class="block mb-1 text-gray-700 font-sans">{{ __('Foto') }}</span>
 
                     <!-- Current Profile Photo -->
                     <div v-show="!form.photo" class="mt-2">
@@ -36,13 +36,13 @@
                     <!-- Profile Photo File Input -->
                     <div class="flex mt-2 space-x-2">
                         <x-splade-file name="photo" :show-filename="false">
-                            {{ __('Select A New Photo') }}
+                            {{ __('Pilih Foto Baru') }}
                         </x-splade-file>
 
                         <x-splade-rehydrate on="profile-information-updated">
                             @if(auth()->user()->profile_photo_path)
                                 <x-splade-link method="delete" :href="route('current-user-photo.destroy')" class="inline-block py-2 px-3 rounded-md border border-gray-300 shadow-sm bg-white hover:bg-gray-100 relative cursor-pointer font-medium text-gray-700 text-sm focus:outline-none focus:ring focus:ring-opacity-50 focus:border-indigo-300 focus:ring-indigo-200">
-                                    {{ __('Remove Photo') }}
+                                    {{ __('Hapus Foto') }}
                                 </x-splade-link>
                             @endif
                         </x-splade-rehydrate>
@@ -52,32 +52,32 @@
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
-                <x-splade-input id="name" name="name" :label="__('Name')" autocomplete="name" />
+                <x-splade-input id="name" name="name" :label="__('Nama')" autocomplete="name" />
             </div>
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
                 <x-splade-input id="email" name="email" type="email" :label="__('Email')" autocomplete="name" />
-                <div id="verify-email" />
+                {{-- <div id="verify-email" /> --}}
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <x-splade-select name="gender" :options="$gender" :label="__('Gender')" />
+                <x-splade-select name="gender" :options="$gender" :label="__('Jenis Kelamin')" />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <x-splade-select name="province_id" :options="$provinces" :label="__('Select Province')" />
+                <x-splade-select name="province_id" :options="$provinces" :label="__('Pilih Provinsi')" />
             </div>
             <div class="col-span-6 sm:col-span-4">
             <x-splade-select name="city_id" remote-url="`/api/cities/${form.province_id}`"  option-label="kabupaten_kota" option-value="id" :label="__('Select City')" />
         </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <x-splade-textarea name="address" :label="__('Address')" autosize />
+                <x-splade-textarea name="address" :label="__('Alamat')" autosize />
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <x-splade-input id="phone_number" name="phone_number" :label="__('Phone Number')" autocomplete="phone_number" />
+                <x-splade-input id="phone_number" name="phone_number" :label="__('Nomor Telepon')" autocomplete="phone_number" />
             </div>
 
             {{-- <div class="col-span-6 sm:col-span-4">
@@ -85,7 +85,7 @@
             </div> --}}
 
             <div class="col-span-6 sm:col-span-4">
-                <x-splade-wysiwyg name="description" label="Description" :jodit="['showXPathInStatusbar' => true]" />
+                <x-splade-wysiwyg name="description" label="Deskripsi" :jodit="['showXPathInStatusbar' => true]" />
             </div>
 
             

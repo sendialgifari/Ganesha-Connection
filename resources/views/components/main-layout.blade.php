@@ -1,6 +1,21 @@
 <div>
-    
-    <nav class="block sm:hidden fixed w-full z-20 top-0 start-0 p-2" style="z-index: 99; background: #005aab !important;">
+
+    @auth
+    @if(is_null(auth()->user()->is_public))
+    <x-splade-modal opened>
+        {{-- <p class="pb-4">Pilih Status Anda</p> --}}
+        <x-splade-form name="filter" method="PUT" action="{{ route('user_update_public', ['id' => auth()->user()->id])}}">
+            {{-- <x-splade-select name="is_public">
+                <option value="0">Civitas ITB</option>
+                <option value="1">Umum</option>
+            </x-splade-select> --}}
+            <x-splade-radios name="is_public" label="Pilih Status Anda" :options="$is_public" />
+            <x-splade-button class="font-bold bg-indigo-500 hover:bg-indigo-700 text-white mt-4" style="width: 100%">Submit</x-splade-button>
+        </x-splade-form>
+    </x-splade-modal>
+    @endif
+    @endauth
+    <nav class="block sm:hidden fixed w-full z-20 top-0 start-0 p-1" style="z-index: 99; background: #005aab !important;">
 
             <x-splade-toggle>
                 <div class="flex md:order-2 items-center">
@@ -85,6 +100,188 @@
                 </div>
             </x-splade-toggle>
     </nav>
+
+    <nav class="block sm:hidden fixed w-full z-20 bottom-0 start-0 pl-5 pr-4 pt-2 pb-2" style="z-index: 99; background: white !important; -webkit-box-shadow: 2px 4px 24px -9px rgba(0,0,0,0.75); -moz-box-shadow: 2px 4px 24px -9px rgba(0,0,0,0.75); box-shadow: 2px 4px 24px -9px rgba(0,0,0,0.75);">
+
+        <div class="grid grid-cols-5 md:grid-cols-5 gap-2" style="align-items: center; text-align: center;">
+            <x-splade-dropdown>
+                <x-slot:trigger>
+                    <div style="height: 50px;" href="javascript:function() { return false; }">
+                        <div class="icon-product"></div>
+                        <div style="font-size: 10px;">Produk</div>
+                    </div>
+                </x-slot>
+                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                    <x-dropdown-link href="/search?type=produk">
+                        Semua Produk
+                    </x-dropdown-link>
+                    @foreach ($filter_product_categories as $id => $item)
+                        <x-dropdown-link href="/search?q=&type=produk&pmin=&pmax=&rt=&cat={{$id}}&adm_cat=&adm_p_cat=&unit=&ob=&user=">
+                            {{$item}}
+                        </x-dropdown-link>
+                    @endforeach
+                </div>
+            </x-splade-dropdown>
+            <x-splade-dropdown>
+                <x-slot:trigger>
+                    <div style="height: 50px;" href="javascript:function() { return false; }">
+                        <div class="icon-jasa"></div>
+                        <div style="font-size: 10px;">Jasa</div>
+                    </div>
+                </x-slot>
+                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                    <x-dropdown-link href="/search?type=jasa">
+                        Semua Jasa
+                    </x-dropdown-link>
+                    @foreach ($filter_service_categories as $id => $item)
+                        <x-dropdown-link href="/search?q=&type=jasa&pmin=&pmax=&rt=&cat={{$id}}&adm_cat=&adm_p_cat=&unit=&ob=&user=">
+                            {{$item}}
+                        </x-dropdown-link>
+                    @endforeach
+                </div>
+            </x-splade-dropdown>
+            <x-splade-dropdown>
+                <x-slot:trigger>
+                    <div style="height: 50px;" href="javascript:function() { return false; }">
+                        <div class="icon-jenis"></div>
+                        <div style="font-size: 10px;">Jenis</div>
+                    </div>
+                </x-slot>
+                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                    <x-dropdown-link href="/search?adm_cat=all">
+                        Semua Jenis Produk Jasa
+                    </x-dropdown-link>
+                    @foreach ($filter_admin_categories as $id => $item)
+                        <x-dropdown-link href="/search?q=&type=&pmin=&pmax=&rt=&cat=&adm_cat={{$id}}&adm_p_cat=&unit=&ob=&user=">
+                            {{$item}}
+                        </x-dropdown-link>
+                    @endforeach
+                </div>
+            </x-splade-dropdown>
+            <x-splade-dropdown>
+                <x-slot:trigger>
+                    <div style="height: 50px;" href="javascript:function() { return false; }">
+                        <div class="icon-department"></div>
+                        <div style="font-size: 10px;">Departemen</div>
+                    </div>
+                </x-slot>
+                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                    <x-dropdown-link href="/search?adm_p_cat=all">
+                        Semua Departemen
+                    </x-dropdown-link>
+                    @foreach ($filter_admin_promotion_categories as $id => $item)
+                        <x-dropdown-link href="/search?q=&type=&pmin=&pmax=&rt=&cat=&adm_cat=&adm_p_cat={{$id}}&unit=&ob=&user=">
+                            {{$item}}
+                        </x-dropdown-link>
+                    @endforeach
+                </div>
+            </x-splade-dropdown>
+            <x-splade-dropdown>
+                <x-slot:trigger>
+                    <div style="height: 50px;" href="javascript:function() { return false; }">
+                        <div class="icon-unit"></div>
+                        <div style="font-size: 10px;">Unit</div>
+                    </div>
+                </x-slot>
+                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                    <x-dropdown-link href="/search?unit=all">
+                        Semua Unit Kerja
+                    </x-dropdown-link>
+                    @foreach ($filter_work_units as $id => $item)
+                        <x-dropdown-link href="/search?q=&type=&pmin=&pmax=&rt=&cat=&adm_cat=&adm_p_cat=&unit={{$id}}&ob=&user=">
+                            {{$item}}
+                        </x-dropdown-link>
+                    @endforeach
+                </div>
+            </x-splade-dropdown>
+            {{-- <x-splade-form name="filter" :default="[
+                'q' => request('q'),
+                'type' => 'produk',
+                'pmin' => request('pmin'),
+                'pmax' => request('pmax'),
+                'rt' => request('rt'),
+                'cat' => '',
+                'adm_cat' => request('adm_cat'),
+                'adm_p_cat' => request('adm_p_cat'),
+                'unit' => request('unit'),
+                'ob' => request('ob'),
+                'user' => request('user'),
+            ]" method="GET" action="/search"
+                :submit-on-change="['cat']">
+                    <x-splade-select name="cat" :options="$filter_product_categories"  style="height: 32px; width: 32px; background: #333;" />
+                    <span style="font-size: 12px; color: #222;">Produk</span>
+            </x-splade-form>
+            <x-splade-form name="filter" :default="[
+                'q' => request('q'),
+                'type' => 'jasa',
+                'pmin' => request('pmin'),
+                'pmax' => request('pmax'),
+                'rt' => request('rt'),
+                'cat' => '',
+                'adm_cat' => request('adm_cat'),
+                'adm_p_cat' => request('adm_p_cat'),
+                'unit' => request('unit'),
+                'ob' => request('ob'),
+                'user' => request('user'),
+            ]" method="GET" action="/search"
+                :submit-on-change="['cat']">
+                    <x-splade-select name="cat" :options="$filter_service_categories"  style="height: 32px; width: 32px; background: #333;"/>
+                    <span style="font-size: 12px; color: #222;">Jasa</span>
+            </x-splade-form>
+            <x-splade-form name="filter" :default="[
+                'q' => request('q'),
+                'type' => request('type'),
+                'pmin' => request('pmin'),
+                'pmax' => request('pmax'),
+                'rt' => request('rt'),
+                'cat' => request('cat'),
+                'adm_cat' => '',
+                'adm_p_cat' => request('adm_p_cat'),
+                'unit' => request('unit'),
+                'ob' => request('ob'),
+                'user' => request('user'),
+            ]" method="GET" action="/search"
+                :submit-on-change="['adm_cat']">
+                <x-splade-select name="adm_cat" :options="$filter_admin_categories"  style="height: 32px; width: 32px; background: #333;" />
+                <span style="font-size: 12px; color: #222;">Jenis</span>
+            </x-splade-form>
+            <x-splade-form name="filter" :default="[
+                'q' => request('q'),
+                'type' => request('type'),
+                'pmin' => request('pmin'),
+                'pmax' => request('pmax'),
+                'rt' => request('rt'),
+                'cat' => request('cat'),
+                'adm_cat' => request('adm_cat'),
+                'adm_p_cat' => '',
+                'unit' => request('unit'),
+                'ob' => request('ob'),
+                'user' => request('user'),
+            ]" method="GET" action="/search"
+                :submit-on-change="['adm_p_cat']">
+                <x-splade-select name="adm_p_cat" :options="$filter_admin_promotion_categories"  style="height: 32px; width: 32px; background: #333;" />
+                <span style="font-size: 12px; color: #222;">Departemen</span>
+            </x-splade-form>
+            <x-splade-form name="filter" :default="[
+                'q' => request('q'),
+                'type' => request('type'),
+                'pmin' => request('pmin'),
+                'pmax' => request('pmax'),
+                'rt' => request('rt'),
+                'cat' => request('cat'),
+                'adm_cat' => request('adm_cat'),
+                'adm_p_cat' => request('adm_p_cat'),
+                'unit' => '',
+                'ob' => request('ob'),
+                'user' => request('user'),
+            ]" method="GET" action="/search"
+                :submit-on-change="['unit']">
+                    <x-splade-select name="unit" :options="$filter_work_units" style="height: 32px; width: 32px; background: #333;"/>
+                    <span style="font-size: 12px; color: #222;">Unit</span>
+            </x-splade-form> --}}
+        </div>
+    </nav>
+
 
 
     <nav class="hidden sm:block fixed w-full z-20 top-0 start-0"

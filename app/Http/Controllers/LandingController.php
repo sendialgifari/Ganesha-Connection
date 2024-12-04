@@ -24,6 +24,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Auth;
 use DB;
 use Hash;
+use View;
 use Intervention\Image\Laravel\Facades\Image;
 use ProtoneMedia\Splade\Facades\Toast;
 use Illuminate\Support\Facades\Storage;
@@ -35,8 +36,25 @@ class LandingController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct(){
+        $data['filter_product_categories'] = ProductCategory::limit(14)->pluck('name', 'id')->toArray();
+        $data['filter_service_categories'] = ServiceCategory::limit(14)->pluck('name', 'id')->toArray();
+        $data['filter_work_units'] = WorkUnit::where('is_active', 1)->limit(14)->pluck('name', 'id')->toArray();
+        $data['filter_admin_categories'] = AdminCategory::where('is_selected', 1)->limit(14)->pluck('name', 'id')->toArray();
+        $data['filter_admin_promotion_categories'] = AdminPromotionCategory::where('is_selected', 1)->limit(14)->pluck('name', 'id')->toArray();
+        $data['is_public'] = [
+                '0' => 'Civitas ITB',
+                '1' => 'Umum',
+        ];
+        View::share ($data);
+    }
+    
     public function index(Request $request)
     {
+        $is_public = 1;
+        if (Auth::check()) {
+            $is_public = Auth::user()->is_public;
+        } 
 
         SEO::macro('openGraphLocale', function (string $value) {
             return $this->metaByProperty('og:locale', $value);
@@ -65,17 +83,27 @@ class LandingController extends Controller
         SEO::twitterDescription('Temukan lebih jauh produk pilihan karya civitas ITB. Produk dan jasa inovatif, semua ada di Ganesha Connection');
         SEO::twitterImage(url('/') . '/images/favicon.ico');
 
+        if($is_public == 1){
+            $product_selected = Product::where('is_selected', 1)->where('is_public', 1)->inRandomOrder()->limit(12)->get();
+            $service_selected = Service::where('is_selected', 1)->where('is_public', 1)->inRandomOrder()->limit(12)->get();
+            $products = Product::where('is_public', 1)->inRandomOrder()->limit(12)->get();
+            $services = Service::where('is_public', 1)->inRandomOrder()->limit(12)->get();
+        } else {
+            $product_selected = Product::where('is_selected', 1)->inRandomOrder()->limit(12)->get();
+            $service_selected = Service::where('is_selected', 1)->inRandomOrder()->limit(12)->get();
+            $products = Product::inRandomOrder()->limit(12)->get();
+            $services = Service::inRandomOrder()->limit(12)->get();
+        }
+
         return view('index', [
             'sliders' => Splade::onLazy(fn() => Slider::orderBy('id', 'DESC')->get()),
-            'product_categories_selected' => ProductCategory::where('is_selected', 1)->orderBy('name', 'ASC')->limit(4)->get(),
-            'service_categories_selected' => ServiceCategory::where('is_selected', 1)->orderBy('name', 'ASC')->limit(4)->get(),
-            'product_selected' => Product::where('is_selected', 1)->orderBy('name', 'ASC')->limit(12)->get(),
-            'service_selected' => Service::where('is_selected', 1)->orderBy('name', 'ASC')->limit(12)->get(),
-            'partner_selected' => User::where('is_selected', 1)->orderBy('name', 'ASC')->limit(8)->get(),
-            // 'products' => Splade::onLazy(fn() => Product::latest()->limit(10)->get()),
-            // 'services' => Splade::onLazy(fn() => Service::latest()->limit(10)->get()),
-            'products' => Product::latest()->limit(12)->get(),
-            'services' => Service::latest()->limit(12)->get(),
+            'product_categories_selected' => ProductCategory::where('is_selected', 1)->orderBy('name', 'ASC')->limit(8)->get(),
+            'service_categories_selected' => ServiceCategory::where('is_selected', 1)->orderBy('name', 'ASC')->limit(8)->get(),
+            'product_selected' => $product_selected,
+            'service_selected' => $service_selected,
+            'partner_selected' => User::where('is_selected', 1)->orderBy('name', 'ASC')->limit(10)->get(),
+            'products' => $products,
+            'services' => $services,
             'admin_promotion_categories' => AdminPromotionCategory::where('is_selected', 1)->orderBy('name', 'ASC')->get(),
             'admin_categories' => AdminCategory::where('is_selected', 1)->orderBy('name', 'ASC')->get(),
         ]);
@@ -122,6 +150,11 @@ class LandingController extends Controller
     public function search(Request $request)
     {
 
+        $is_public = 1;
+        if (Auth::check()) {
+            $is_public = Auth::user()->is_public;
+        }
+
         $q = $request->input('q');
         $cat = $request->input('cat');
         $adm_cat = $request->input('adm_cat');
@@ -137,6 +170,8 @@ class LandingController extends Controller
 
         $admin_categories = AdminCategory::orderBy('name', 'ASC')->get();
 
+        $work_units = WorkUnit::where('is_active', 1)->orderBy('name', 'ASC')->get();
+
         $admin_promotion_categories = AdminPromotionCategory::orderBy('name', 'ASC')->get();
 
         $admin_categories_ids = $admin_categories->pluck('id')->toArray();
@@ -145,20 +180,36 @@ class LandingController extends Controller
         if ($type == "produk") {
             $title = 'Produk';
             if ($query == "") {
-                $data = new Product();
+                if($is_public == 1){
+                    $data = Product::where('is_public', 1);
+                } else {
+                    $data = new Product();
+                }
             } else {
                 $title = 'Search Produk "' . $query . '"';
-                $data = Product::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+                if($is_public == 1){
+                    $data = Product::whereRaw('lower(name) like (?)', ["%{$query}%"])->where('is_public', 1);
+                } else {
+                    $data = Product::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+                }
             }
 
             $categories = ProductCategory::orderBy('name', 'ASC')->get();
         } else if ($type == "jasa") {
             $title = 'Jasa';
             if ($query == "") {
-                $data = new Service();
+                if($is_public == 1){
+                    $data = Service::where('is_public', 1);
+                } else {
+                    $data = new Service();
+                }
             } else {
                 $title = 'Search Jasa "' . $query . '"';
-                $data = Service::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+                if($is_public == 1){
+                    $data = Service::whereRaw('lower(name) like (?)', ["%{$query}%"])->where('is_public', 1);
+                } else {
+                    $data = Service::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+                }
             }
 
             $categories = ServiceCategory::orderBy('name', 'ASC')->get();
@@ -167,7 +218,9 @@ class LandingController extends Controller
                 $title = 'Search "' . $query . '"';
             } else {
                 if($adm_p_cat){
-                    if($adm_p_cat == "non"){
+                    if($adm_p_cat == "all"){
+                        $title = 'Search Semua Departemen';
+                    } else if($adm_p_cat == "non"){
                         $title = 'Search Departemen Non-Jenis';
                     } else {
                         $admin_promotion_category = AdminPromotionCategory::where('id', $adm_p_cat)->first();
@@ -177,8 +230,10 @@ class LandingController extends Controller
                             $title = 'Search Departemen Non-Jenis';
                         }
                     }
-                } else {
-                    if($adm_cat == "non"){
+                } else if($adm_cat){
+                    if($adm_cat == "all"){
+                        $title = 'Search Semua Jenis Produk / Jasa';
+                    } else if($adm_cat == "non"){
                         $title = 'Search Jenis Produk / Jasa Non-Jenis';
                     } else {
                         $admin_category = AdminCategory::where('id', $adm_cat)->first();
@@ -186,6 +241,17 @@ class LandingController extends Controller
                             $title = 'Search Jenis Produk / Jasa '. $admin_category->name;
                         } else {
                             $title = 'Search Jenis Produk / Jasa Non-Jenis';
+                        }
+                    }
+                } else if($unit){
+                    if($unit == "all"){
+                        $title = 'Search Semua Unit Kerja';
+                    } else {
+                        $work_unit = WorkUnit::where('id', $unit)->first();
+                        if($work_unit){
+                            $title = 'Search Unit Kerja '. $work_unit->name;
+                        } else {
+                            $title = 'Search Semua Unit Kerja';
                         }
                     }
                 }
@@ -206,7 +272,11 @@ class LandingController extends Controller
             // $data = Service::select('admin_category_id', 'id', 'user_id', 'service_category_id as category_id', 'name', 'fake_price', 'price', 'image_thumb', 'created_at', 'slug', 'total_comments', 'total_comment_star_1', 'total_comment_star_2', 'total_comment_star_3', 'total_comment_star_4', 'total_comment_star_5')->whereRaw('lower(name) like (?)', ["%{$query}%"])->addSelect(DB::raw("'jasa' as type"))
             //     ->union($products);
 
-            $data = Catalog::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+            if($is_public == 1){
+                $data = Catalog::whereRaw('lower(name) like (?)', ["%{$query}%"])->where('is_public', 1);
+            } else {
+                $data = Catalog::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+            }
 
             $categories = [];
         }
@@ -239,9 +309,16 @@ class LandingController extends Controller
         SEO::twitterImage(url('/') . '/images/favicon.ico');
 
         if ($unit) {
-            $data = $data->whereHas('work_units', function ($query) use ($unit) {
-                return $query->where('work_unit_id', '=', $unit);
-            });
+            if($unit == "all"){
+                $work_unit_ids = $work_units->pluck('id')->toArray();
+                $data = $data->whereHas('work_units', function ($query) use ($work_unit_ids) {
+                    return $query->whereIn('work_unit_id', $work_unit_ids);
+                });
+            } else {
+                $data = $data->whereHas('work_units', function ($query) use ($unit) {
+                    return $query->where('work_unit_id', '=', $unit);
+                });
+            }
         }
 
         if($user) {
@@ -256,14 +333,18 @@ class LandingController extends Controller
             }
         }
         if ($adm_cat) {
-            if($adm_cat == "non"){
+            if($adm_cat == "all"){
+                $data = $data->whereNotNull('admin_category_id');
+            } else if($adm_cat == "non"){
                 $data = $data->where('admin_category_id', null);
             } else {
                 $data = $data->where('admin_category_id', $adm_cat);
             }
         }
         if ($adm_p_cat) {
-            if($adm_p_cat == "non"){
+            if($adm_p_cat == "all"){
+                $data = $data->whereNotNull('admin_promotion_category_id');
+            } else if($adm_p_cat == "non"){
                 $data = $data->where('admin_promotion_category_id', null);
             } else {
                 $data = $data->where('admin_promotion_category_id', $adm_p_cat);
@@ -305,10 +386,6 @@ class LandingController extends Controller
 
         // dd($data);
 
-        $work_units = WorkUnit::where('is_active', 1)->orderBy('name', 'ASC')->get();
-
-        
-
         $data = array(
             'title' => $title,
             'search_type' => $type,
@@ -324,6 +401,11 @@ class LandingController extends Controller
 
     public function detail(Request $request, $type, $slug)
     {
+
+        $is_public = 1;
+        if (Auth::check()) {
+            $is_public = Auth::user()->is_public;
+        }
 
         $images_data = [];
         $images = [];
@@ -352,13 +434,29 @@ class LandingController extends Controller
                 $images[$key]['section'] = $section;
             }
 
-            $related = Product::where('product_category_id', $detail_data->product_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
-            if (count($related) == 0) {
-                $related = Product::where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            if($is_public == 1){
+                $related = Product::where('is_public', 1)->where('product_category_id', $detail_data->product_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $related = Product::where('product_category_id', $detail_data->product_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
             }
-            $user_catalogs = Product::where('product_category_id', $detail_data->product_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            if (count($related) == 0) {
+                if($is_public == 1){
+                    $related = Product::where('is_public', 1)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $related = Product::where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                }
+            }
+            if($is_public == 1){
+                $user_catalogs = Product::where('is_public', 1)->where('product_category_id', $detail_data->product_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $user_catalogs = Product::where('product_category_id', $detail_data->product_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            }
             if (count($user_catalogs) == 0) {
-                $user_catalogs = Product::where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                if($is_public == 1){
+                    $user_catalogs = Product::where('is_public', 1)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $user_catalogs = Product::where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                }
             }
             if ($request->input('stars')) {
                 // $comments = Splade::onLazy(fn() => ProductComment::where('product_id', $detail_data->id)->where('ratings', $request->input('stars'))->orderBy('created_at', 'DESC')->paginate(10)->withQueryString());
@@ -402,13 +500,29 @@ class LandingController extends Controller
                 $images[$key]['section'] = $section;
             }
 
-            $related = Service::where('service_category_id', $detail_data->service_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
-            if (count($related) == 0) {
-                $related = Service::where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            if($is_public == 1){
+                $related = Service::where('is_public', 1)->where('service_category_id', $detail_data->service_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $related = Service::where('service_category_id', $detail_data->service_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
             }
-            $user_catalogs = Service::where('service_category_id', $detail_data->service_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            if (count($related) == 0) {
+                if($is_public == 1){
+                    $related = Service::where('is_public', 1)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $related = Service::where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                }
+            }
+            if($is_public == 1){
+                $user_catalogs = Service::where('is_public', 1)->where('service_category_id', $detail_data->service_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $user_catalogs = Service::where('service_category_id', $detail_data->service_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            }
             if (count($user_catalogs) == 0) {
-                $user_catalogs = Service::where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                if($is_public == 1){
+                    $user_catalogs = Service::where('is_public', 1)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $user_catalogs = Service::where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                }
             }
             if ($request->input('stars')) {
                 // $comments = Splade::onLazy(fn() => ServiceComment::where('service_id', $detail_data->id)->where('ratings', $request->input('stars'))->orderBy('created_at', 'DESC')->paginate(10)->withQueryString());
@@ -428,8 +542,13 @@ class LandingController extends Controller
 
         } else if ($type == "partner") {
             $detail_data = User::where('slug', $slug)->first();
-            $related = Service::where('user_id', $detail_data->id)->inRandomOrder()->limit(6)->get();
-            $user_catalogs = Product::where('user_id', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            if($is_public == 1){
+                $related = Service::where('is_public', 1)->where('user_id', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                $user_catalogs = Product::where('is_public', 1)->where('user_id', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $related = Service::where('user_id', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                $user_catalogs = Product::where('user_id', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            }
             $comments = [];
             $check_user_comment = [];
 

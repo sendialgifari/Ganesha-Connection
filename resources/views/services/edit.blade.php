@@ -1,9 +1,9 @@
-@seoTitle(__('Service Management'))
+@seoTitle(__('Edit Jasa'))
 
 <x-app-layout>
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Service') }}
+            {{ __('Edit Jasa') }}
         </h2>
     </x-slot>
 
@@ -37,6 +37,7 @@
                     min-size="10KB" max-size="2MB" />
                 {{-- <img src="{{ url('storage/services/'.$service->image) }}" alt="" title="" /> --}}
                 <x-splade-select name="work_units[]" label="Unit kerja" :options="$work_units" multiple relation choices />
+                <x-splade-radios name="is_public" label="Tampilkan Jasa" :options="$is_public" />
                 <x-splade-submit label="Update" />
             </x-splade-form>
         </div>

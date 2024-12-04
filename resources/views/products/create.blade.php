@@ -1,15 +1,15 @@
-@seoTitle(__('Product Management'))
+@seoTitle(__('Tambah Produk'))
 
 <x-app-layout>
     <x-slot:header>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Product') }}
+            {{ __('Tambah Produk') }}
         </h2>
     </x-slot>
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <x-splade-form class="space-y-4" action="{{ route('products.store') }}" :default="['admin_category_id' => '0', 'admin_promotion_category_id' => '0', 'is_selected' => '0', 'is_readystock' => '1', 'price_type' => '0']">
+            <x-splade-form class="space-y-4" action="{{ route('products.store') }}" :default="['is_public' => '1', 'admin_category_id' => '0', 'admin_promotion_category_id' => '0', 'is_selected' => '0', 'is_readystock' => '1', 'price_type' => '0']">
                 <x-splade-select name="product_category_id" label="Kategori produk" :options="$product_categories" />
                 @if (auth()->user()->getRoleNames()[0] == 'admin' || auth()->user()->getRoleNames()[0] == 'superadmin')
                     <x-splade-radios name="is_selected" label="Produk pilihan" :options="$is_selected" />
@@ -36,6 +36,7 @@
                     min-size="10KB" max-size="2MB" />
                 {{-- <img src="{{ url('storage/products/'.$product->image) }}" alt="" title="" /> --}}
                 <x-splade-select name="work_units[]" label="Unit kerja" :options="$work_units" multiple relation choices />
+                <x-splade-radios name="is_public" label="Tampilkan Produk" :options="$is_public" />
                 <x-splade-submit label="Save" />
             </x-splade-form>
         </div>

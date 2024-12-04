@@ -86,7 +86,7 @@ class AdminPromotionCategoryController extends Controller
             'is_selected' => $request->is_selected,
         ]);
 
-        Toast::title('Admin Category was created!')->autoDismiss(5);
+        Toast::title('Kategori admin berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('admin_promotion_categories.index');
     }
@@ -151,7 +151,7 @@ class AdminPromotionCategoryController extends Controller
             'is_selected' => $request->is_selected,
         ]);
 
-        Toast::title('Admin Category was updated!')->autoDismiss(5);
+        Toast::title('Kategori admin berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('admin_promotion_categories.index');
     }
@@ -168,7 +168,7 @@ class AdminPromotionCategoryController extends Controller
         }
         
         $admin_promotion_category->delete();
-        Toast::title('Admin Category was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Kategori admin berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('admin_promotion_categories.index');
     }

@@ -1,10 +1,10 @@
-@seoTitle(__('Visitors'))
+@seoTitle(__('Statistik Pengunjung'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Visitors') }}
+                {{ __('Statistik Pengunjung') }}
             </h2>
         </div>
         </x-slot>

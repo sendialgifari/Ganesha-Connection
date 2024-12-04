@@ -107,7 +107,7 @@ class ServiceCommentController extends Controller
             'ratings' => $request->ratings,
         ]);
 
-        Toast::title('Service Comment was created!')->autoDismiss(5);
+        Toast::title('Komentar jasa berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('detail', ['type'=>'jasa','slug'=>$service->slug]);
     }
@@ -152,7 +152,7 @@ class ServiceCommentController extends Controller
         $service->update($updateData);
 
         $service_comment->delete();
-        Toast::title('Service Comment was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Komentar jasa berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('service_comments.index');
     }

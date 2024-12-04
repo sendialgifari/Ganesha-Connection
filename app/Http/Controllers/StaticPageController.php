@@ -71,7 +71,7 @@ class StaticPageController extends Controller
             'slug' => $slug,
         ]);
 
-        Toast::title('Your static page was created!')->autoDismiss(5);
+        Toast::title('Halaman statis berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('static_pages.index');
     }
@@ -112,7 +112,7 @@ class StaticPageController extends Controller
             'slug' => $slug,
         ]);
 
-        Toast::title('Your static page was updated!')->autoDismiss(5);
+        Toast::title('Halaman statis berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('static_pages.index');
     }
@@ -123,7 +123,7 @@ class StaticPageController extends Controller
     public function destroy(StaticPage $static_page)
     {
         $static_page->delete();
-        Toast::title('Your static page was deleted!')->danger()->autoDismiss(5);
+        Toast::title('Halaman statis berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('static_pages.index');
     }

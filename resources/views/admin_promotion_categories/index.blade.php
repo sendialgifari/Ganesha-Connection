@@ -1,14 +1,13 @@
-@seoTitle(__('Admin Categories 2 Management'))
+@seoTitle(__('Kelola Kategori Admin 2'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Admin Categories 2 Management') }}
+                {{ __('Kelola Kategori Admin 2') }}
             </h2>
             <x-splade-link href="{{ route('admin_promotion_categories.create') }}"
-                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Create
-                Admin Categories 2
+                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Tambah Kategori Admin 2
             </x-splade-link>
         </div>
     </x-slot>
@@ -24,7 +23,7 @@
                     <x-splade-form action="{{ route('admin_promotion_categories.destroy', $admin_promotion_category) }}" method="delete"
                         confirm="Delete Admin Category 2" confirm-text="Are you sure you want to delete admin category 2?"
                         confirm-button="Yes" cancel-button="No">
-                        <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                        <x-splade-button class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                 @endcell
             </x-splade-table>

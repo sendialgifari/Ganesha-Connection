@@ -1,14 +1,13 @@
-@seoTitle(__('Service Management'))
+@seoTitle(__('Kelola Jasa'))
 
 <x-app-layout>
     <x-slot:header>
         <div class="flex justify-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Service Management') }}
+                {{ __('Kelola Jasa') }}
             </h2>
             <a href="{{ route('services.create') }}"
-                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Create
-                Service
+                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md">Tambah Jasa
             </a>
         </div>
         </x-slot>
@@ -31,7 +30,7 @@
                         confirm="Delete Service" confirm-text="Are you sure you want to delete service?"
                         confirm-button="Yes" cancel-button="No">
                         <x-splade-button
-                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Delete</x-splade-button>
+                            class="font-bold bg-red-500 hover:bg-red-700 text-white">Hapus</x-splade-button>
                     </x-splade-form>
                     @endcell
                 </x-splade-table>

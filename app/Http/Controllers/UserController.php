@@ -6,6 +6,7 @@ use App\Models\Province;
 use Spatie\Permission\Models\Role;
 use App\Models\Product;
 use App\Models\Service;
+use App\Models\Community;
 use App\Models\ProductImage;
 use App\Models\ServiceImage;
 use App\Models\User;
@@ -38,6 +39,7 @@ class UserController extends Controller
                 'p' => 'Perempuan',
             ],
             'provinces' => Province::pluck('prov', 'id')->toArray(),
+            'communities' => Community::pluck('name', 'id')->toArray(),
         ]);
     }
 
@@ -53,7 +55,7 @@ class UserController extends Controller
             });
         });
 
-        $users = QueryBuilder::for(User::where('is_verified', 0))
+        $users = QueryBuilder::for(User::where('is_verified', 0)->role('partner'))
             ->defaultSort('name')
             ->allowedSorts(['name', 'email'])
             ->allowedFilters(['name', 'email', $globalSearch])
@@ -64,14 +66,16 @@ class UserController extends Controller
             'users' => SpladeTable::for($users)
                 ->defaultSort('name')
                 ->withGlobalSearch()
-                ->column('name', sortable: true, searchable: true)
+                ->column('name', 'Nama', sortable: true, searchable: true)
                 ->column('email', sortable: true, searchable: true)
-                ->column('phone_number')
-                ->column('province.prov')
-                ->column('city.kabupaten_kota')
-                ->column('address')
-                ->column('gender')
-                ->column('action')
+                ->column('unique_id', 'Ijazah/NIM/NIP')
+                ->column('community.name', 'Civitas')
+                ->column('phone_number', 'Telepon')
+                ->column('province.prov', 'Provinsi')
+                ->column('city.kabupaten_kota', 'Kabupaten Kota')
+                ->column('address', 'Alamat')
+                ->column('gender', 'Jenis Kelamin')
+                ->column('action', 'Aksi')
             ,
         ]);
     }
@@ -86,7 +90,7 @@ class UserController extends Controller
         ]);
         // $user->syncRoles(6);
 
-        Toast::title('User was approved!')->autoDismiss(5);
+        Toast::title('User berhasil diverifikasi!')->autoDismiss(5);
         return redirect()->route('partner_approval');
     }
 
@@ -99,8 +103,19 @@ class UserController extends Controller
         ]);
         $user->syncRoles(5);
 
-        Toast::title('User was declined!')->autoDismiss(5);
+        Toast::title('User gagal terverifikasi!')->autoDismiss(5);
         return redirect()->route('partner_approval');
+    }
+
+    public function user_update_public(Request $request)
+    {
+        $user = User::where('id', $request->id)->first();
+        $user->update([
+            'is_public' => $request->is_public,
+        ]);
+
+        Toast::title('Status Anda berhasil diperbarui')->autoDismiss(5);
+        return redirect()->back();
     }
 
     public function partner_registration_update(Request $request)
@@ -114,6 +129,8 @@ class UserController extends Controller
             'address' => 'required',
             'phone_number' => 'required|numeric|min:2',
             'description' => 'required',
+            'unique_id' => 'required',
+            'community_id' => 'required',
         ])->validate();
 
         $slug = str_replace(array(" ", ".", ",", "'", '"', "?", "!", ":", "/"), array("-", "-", "", "", "", "", "", "", ""), strtolower($request->name)) . "-" . Auth::user()->id;
@@ -129,11 +146,14 @@ class UserController extends Controller
             'address' => $request->address,
             'phone_number' => $request->phone_number,
             'description' => $request->description,
+            'unique_id' => $request->unique_id,
+            'community_id' => $request->community_id,
             'partner_approval' => 0,
             'partner_approval_date' => Carbon::now(),
         ]);
         $user->syncRoles(6);
 
+        Toast::title('Daftar Partner Berhasil!')->autoDismiss(5);
         return redirect()->route('partner_registration');
     }
     public function index()
@@ -165,10 +185,17 @@ class UserController extends Controller
             'users' => SpladeTable::for($users)
                 ->defaultSort('name')
                 ->withGlobalSearch()
-                ->column('name', sortable: true, searchable: true)
+                ->column('name', 'Nama', sortable: true, searchable: true)
                 ->column('email', sortable: true, searchable: true)
-                ->column('roles.name', sortable: true, searchable: true)
-                ->column('is_selected', sortable: true, searchable: true)
+                ->column('roles.name', 'Role', sortable: true, searchable: true)
+                ->column('is_selected', 'Pilihan', sortable: true, searchable: true)
+                ->column('unique_id', 'Ijazah/NIM/NIP')
+                ->column('community.name', 'Civitas')
+                ->column('phone_number', 'Telepon')
+                ->column('province.prov', 'Provinsi')
+                ->column('city.kabupaten_kota', 'Kabupaten Kota')
+                ->column('address', 'Alamat')
+                ->column('gender', 'Jenis Kelamin')
                 ->selectFilter('roles.id', $roles)
                 ->column('action')
             ,
@@ -209,7 +236,7 @@ class UserController extends Controller
         ]);
         $user->syncRoles((int) $request->roles);
 
-        Toast::title('User was created!')->autoDismiss(5);
+        Toast::title('User berhasil dibuat!')->autoDismiss(5);
 
         return redirect()->route('users.index');
     }
@@ -272,7 +299,7 @@ class UserController extends Controller
         }
         $user->syncRoles((int) $roles);
 
-        Toast::title('User was updated!')->autoDismiss(5);
+        Toast::title('User berhasil diperbarui!')->autoDismiss(5);
 
         return redirect()->route('users.index');
     }
@@ -346,7 +373,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {
         }
         $user->delete();
-        Toast::title('User was deleted!')->danger()->autoDismiss(5);
+        Toast::title('User berhasil dihapus!')->danger()->autoDismiss(5);
 
         return redirect()->route('users.index');
     }
