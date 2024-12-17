@@ -281,6 +281,9 @@
                         </div>
                     </div>
                     {{-- <x-splade-lazy> --}}
+                    @if(count($data) == 0)
+                    <h3 class="pt-8 text-xl text-gray-900 dark:text-white sm:text-2xl text-center">Produk / Jasa tidak tersedia</h3>
+                    @endif
                     <div class="mb-4 grid gap-4 grid-cols-2 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
 
                         {{-- <x-slot:placeholder> loading... </x-slot:placeholder> --}}
