@@ -234,7 +234,7 @@
 
 
 
-
+                    <img class="mx-auto rounded-lg shadow h-full" src="/images/produk-banner.png" style="width: 100%; background: #e1e1e1" alt="load" />
 
 
 
