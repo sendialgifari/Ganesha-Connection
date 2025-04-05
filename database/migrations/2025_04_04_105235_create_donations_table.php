@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('short_description')->nullable();
             $table->string('external_link')->nullable();
-            $table->integer('price');
+            $table->integer('goal_amount');
             $table->integer('collected_amount')->default(0);
             $table->integer('is_public')->default(0);
             $table->integer('ratings')->default(0);
