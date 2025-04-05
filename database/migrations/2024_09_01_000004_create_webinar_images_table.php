@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('webinar_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('webinar_id')->constrained()->cascadeOnDelete();
+            $table->integer('webinar_id');
             $table->string('image');
             $table->timestamps();
         });

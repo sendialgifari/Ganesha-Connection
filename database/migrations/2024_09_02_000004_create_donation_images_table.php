@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('donation_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('donation_id')->constrained()->cascadeOnDelete();
+            $table->integer('donation_id');
             $table->string('image');
             $table->timestamps();
         });

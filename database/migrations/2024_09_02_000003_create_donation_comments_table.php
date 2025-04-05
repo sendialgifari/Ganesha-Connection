@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('donation_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('donation_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->integer('donation_id');
+            $table->integer('user_id');
             $table->string('comment');
             $table->integer('ratings')->default(0);
             $table->timestamps();
