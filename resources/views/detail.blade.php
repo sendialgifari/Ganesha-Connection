@@ -141,9 +141,15 @@
                                     {{ number_format($detail_data->fake_price, 0, ',', '.') }}</del></span>@endif
                             
                                 @if($detail_data->price_type == 0)
+                                @if($type == "donasi")
+                                <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
+                                    Rp. {{ number_format($detail_data->collected_amount, 0, ',', '.') }} / <span class="font-medium">Rp. {{ number_format($detail_data->goal_amount, 0, ',', '.') }}</span>
+                                </p>
+                                @else
                                 <p class="text-2xl font-extrabold text-gray-900 sm:text-3xl dark:text-white">
                                     Rp. {{ number_format($detail_data->price, 0, ',', '.') }}
                                 </p>
+                                @endif
                                 @else
                                 <p class="text-md font-extrabold text-gray-900 dark:text-white">
                                     Hubungi kami untuk harga terbaik
@@ -158,6 +164,10 @@
                     </div>
 
                     @if ($type !== 'partner')
+                        @if($type == 'webinar')
+                        Tanggal Webinar : {{ $detail_data->datetime }}<br>
+                        Durasi : {{ $detail_data->duration }} menit
+                        @endif
                         @if(count($detail_data->work_units) != 0)
                         <div class="mt-4 mb-1">
                             <span>Unit : </span>
@@ -363,7 +373,7 @@
                                 padding: 25px 45px;
                             ">
                     <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Deskripsi
-                        {{ $type == 'produk' ? 'Produk' : 'Jasa' }}
+                        {{ $type == 'produk' ? 'Produk' : ($type == 'jasa' ? 'Jasa' : ($type == 'webinar' ? 'Webinar' : ($type == 'donasi' ? 'Donasi' : ''))) }}
                     </h2>
                     {!! $detail_data->description !!}
                 </div>
@@ -627,14 +637,14 @@
                     <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-                                {{ $type == 'produk' ? 'Produk' : 'Jasa' }} Terkait
+                                {{ $type == 'produk' ? 'Produk' : ($type == 'jasa' ? 'Jasa' : ($type == 'webinar' ? 'Webinar' : ($type == 'donasi' ? 'Donasi' : ''))) }} Terkait
                             </h2>
                         </div>
                         <div class="flex items-center space-x-4">
                             <Link href="{{ $type == 'produk' ? '/search?type=produk' : '/search?type=jasa' }}"><button
                                 type="button"
                                 class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto">
-                                Lihat {{ $type == 'produk' ? 'Produk' : 'Jasa' }} selengkapnya
+                                Lihat {{ $type == 'produk' ? 'Produk' : ($type == 'jasa' ? 'Jasa' : ($type == 'webinar' ? 'Webinar' : ($type == 'donasi' ? 'Donasi' : ''))) }} selengkapnya
                             </button></Link>
                         </div>
                     </div>
@@ -753,14 +763,14 @@
                     <div class="mb-4 items-center justify-between flex sm:space-y-0 md:mb-4">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-                                {{ $type == 'produk' ? 'Produk' : 'Jasa' }} Lainnya dari
+                                {{ $type == 'produk' ? 'Produk' : ($type == 'jasa' ? 'Jasa' : ($type == 'webinar' ? 'Webinar' : ($type == 'donasi' ? 'Donasi' : ''))) }} Lainnya dari
                                 {{ $detail_data->user->name }}
                             </h2>
                         </div>
                         <div class="flex items-center space-x-4">
                             <Link href="/search?type={{ $type }}&user={{ $detail_data->user->id }}"><button type="button"
                                 class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto">
-                                Lihat {{ $type == 'produk' ? 'Produk' : 'Jasa' }} selengkapnya
+                                Lihat {{ $type == 'produk' ? 'Produk' : ($type == 'jasa' ? 'Jasa' : ($type == 'webinar' ? 'Webinar' : ($type == 'donasi' ? 'Donasi' : ''))) }} selengkapnya
                             </button></Link>
                         </div>
                     </div>

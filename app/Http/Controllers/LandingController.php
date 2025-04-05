@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Catalog;
 use App\Models\AdminCategory;
 use App\Models\AdminPromotionCategory;
+use App\Models\Donation;
+use App\Models\DonationCategory;
+use App\Models\DonationComment;
 use App\Models\Service;
 use App\Models\ServiceCategory;
 use App\Models\ServiceComment;
@@ -16,6 +19,9 @@ use App\Models\ProductCategory;
 use App\Models\ProductComment;
 use App\Models\Slider;
 use App\Models\User;
+use App\Models\Webinar;
+use App\Models\WebinarCategory;
+use App\Models\WebinarComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use ProtoneMedia\Splade\SpladeTable;
@@ -213,6 +219,42 @@ class LandingController extends Controller
             }
 
             $categories = ServiceCategory::orderBy('name', 'ASC')->get();
+        } else if ($type == "webinar") {
+            $title = 'Webinar';
+            if ($query == "") {
+                if($is_public == 1){
+                    $data = Webinar::where('is_public', 1);
+                } else {
+                    $data = new Webinar();
+                }
+            } else {
+                $title = 'Search Webinar "' . $query . '"';
+                if($is_public == 1){
+                    $data = Webinar::whereRaw('lower(name) like (?)', ["%{$query}%"])->where('is_public', 1);
+                } else {
+                    $data = Webinar::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+                }
+            }
+
+            $categories = WebinarCategory::orderBy('name', 'ASC')->get();
+        } else if ($type == "donasi") {
+            $title = 'Donasi';
+            if ($query == "") {
+                if($is_public == 1){
+                    $data = Donation::where('is_public', 1);
+                } else {
+                    $data = new Donation();
+                }
+            } else {
+                $title = 'Search Donasi "' . $query . '"';
+                if($is_public == 1){
+                    $data = Donation::whereRaw('lower(name) like (?)', ["%{$query}%"])->where('is_public', 1);
+                } else {
+                    $data = Donation::whereRaw('lower(name) like (?)', ["%{$query}%"]);
+                }
+            }
+
+            $categories = DonationCategory::orderBy('name', 'ASC')->get();
         } else {
             if($query){
                 $title = 'Search "' . $query . '"';
@@ -232,15 +274,15 @@ class LandingController extends Controller
                     }
                 } else if($adm_cat){
                     if($adm_cat == "all"){
-                        $title = 'Search Semua Jenis Produk / Jasa';
+                        $title = 'Search Semua Jenis';
                     } else if($adm_cat == "non"){
-                        $title = 'Search Jenis Produk / Jasa Non-Jenis';
+                        $title = 'Search Semua Non-Jenis';
                     } else {
                         $admin_category = AdminCategory::where('id', $adm_cat)->first();
                         if($admin_category){
-                            $title = 'Search Jenis Produk / Jasa '. $admin_category->name;
+                            $title = 'Search Jenis '. $admin_category->name;
                         } else {
-                            $title = 'Search Jenis Produk / Jasa Non-Jenis';
+                            $title = 'Search Non-Jenis';
                         }
                     }
                 } else if($unit){
@@ -350,13 +392,17 @@ class LandingController extends Controller
                 $data = $data->where('admin_promotion_category_id', $adm_p_cat);
             }
         }
-        if (!$pmin) {
-            $pmin = 0;
+
+        if($type != "donasi"){
+            if (!$pmin) {
+                $pmin = 0;
+            }
+            if (!$pmax) {
+                $pmax = 999999999;
+            }
+            $data = $data->whereBetween('price', [$pmin, $pmax]);
         }
-        if (!$pmax) {
-            $pmax = 999999999;
-        }
-        $data = $data->whereBetween('price', [$pmin, $pmax]);
+        
 
         if ($rt) {
             if ($rt != 0) {
@@ -383,8 +429,6 @@ class LandingController extends Controller
 
         // $data = Splade::onLazy(fn() => $data->paginate(18)->withQueryString());
         $data = $data->paginate(18)->withQueryString();
-
-        // dd($data);
 
         $data = array(
             'title' => $title,
@@ -536,6 +580,138 @@ class LandingController extends Controller
             if (Auth::check()) {
                 $user = Auth::user();
                 $check_user_comment = ServiceComment::where('service_id', $detail_data->id)->where('user_id', $user->id)->first();
+            }
+
+            $meta_desc = $detail_data->short_description;
+
+        } else if ($type == "webinar") {
+            $detail_data = Webinar::where('slug', $slug)->first();
+
+            $images = $detail_data->images->toArray();
+            array_unshift($images, array('image' => $detail_data->image, 'webinar_id' => $detail_data->id));
+            foreach ($images as $key => $value) {
+                if($key == 0){
+                    $images_data["image".$key] = true;
+                } else {
+                    $images_data["image".$key] = false;
+                }
+            }
+            foreach ($images as $key => $value) {
+                $click = "";
+                $section = "image".$key;
+                foreach ($images_data as $key_data => $val) {
+                    if($key_data == $section){
+                        $click .= "setToggle('".$key_data."', true);";
+                    } else {
+                        $click .= "setToggle('".$key_data."', false);";
+                    }
+                }
+                $images[$key]['click'] = $click;
+                $images[$key]['section'] = $section;
+            }
+
+            if($is_public == 1){
+                $related = Webinar::where('is_public', 1)->where('webinar_category_id', $detail_data->webinar_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $related = Webinar::where('webinar_category_id', $detail_data->webinar_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            }
+            if (count($related) == 0) {
+                if($is_public == 1){
+                    $related = Webinar::where('is_public', 1)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $related = Webinar::where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                }
+            }
+            if($is_public == 1){
+                $user_catalogs = Webinar::where('is_public', 1)->where('webinar_category_id', $detail_data->webinar_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $user_catalogs = Webinar::where('webinar_category_id', $detail_data->webinar_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            }
+            if (count($user_catalogs) == 0) {
+                if($is_public == 1){
+                    $user_catalogs = Webinar::where('is_public', 1)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $user_catalogs = Webinar::where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                }
+            }
+            if ($request->input('stars')) {
+                // $comments = Splade::onLazy(fn() => ServiceComment::where('webinar_id', $detail_data->id)->where('ratings', $request->input('stars'))->orderBy('created_at', 'DESC')->paginate(10)->withQueryString());
+                $comments = WebinarComment::where('webinar_id', $detail_data->id)->where('ratings', $request->input('stars'))->orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
+            } else {
+                // $comments = Splade::onLazy(fn() => ServiceComment::where('webinar_id', $detail_data->id)->orderBy('created_at', 'DESC')->paginate(10)->withQueryString());
+                $comments = WebinarComment::where('webinar_id', $detail_data->id)->orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
+            }
+
+            $check_user_comment = [];
+            if (Auth::check()) {
+                $user = Auth::user();
+                $check_user_comment = WebinarComment::where('webinar_id', $detail_data->id)->where('user_id', $user->id)->first();
+            }
+
+            $meta_desc = $detail_data->short_description;
+
+        }  else if ($type == "donasi") {
+            $detail_data = Donation::where('slug', $slug)->first();
+
+            $images = $detail_data->images->toArray();
+            array_unshift($images, array('image' => $detail_data->image, 'donation_id' => $detail_data->id));
+            foreach ($images as $key => $value) {
+                if($key == 0){
+                    $images_data["image".$key] = true;
+                } else {
+                    $images_data["image".$key] = false;
+                }
+            }
+            foreach ($images as $key => $value) {
+                $click = "";
+                $section = "image".$key;
+                foreach ($images_data as $key_data => $val) {
+                    if($key_data == $section){
+                        $click .= "setToggle('".$key_data."', true);";
+                    } else {
+                        $click .= "setToggle('".$key_data."', false);";
+                    }
+                }
+                $images[$key]['click'] = $click;
+                $images[$key]['section'] = $section;
+            }
+
+            if($is_public == 1){
+                $related = Donation::where('is_public', 1)->where('donation_category_id', $detail_data->donation_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $related = Donation::where('donation_category_id', $detail_data->donation_category->id)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+            }
+            if (count($related) == 0) {
+                if($is_public == 1){
+                    $related = Donation::where('is_public', 1)->where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $related = Donation::where('id', '!=', $detail_data->id)->inRandomOrder()->limit(6)->get();
+                }
+            }
+            if($is_public == 1){
+                $user_catalogs = Donation::where('is_public', 1)->where('donation_category_id', $detail_data->donation_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            } else {
+                $user_catalogs = Donation::where('donation_category_id', $detail_data->donation_category->id)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+            }
+            if (count($user_catalogs) == 0) {
+                if($is_public == 1){
+                    $user_catalogs = Donation::where('is_public', 1)->where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                } else {
+                    $user_catalogs = Donation::where('id', '!=', $detail_data->id)->where('user_id', $detail_data->user->id)->inRandomOrder()->limit(6)->get();
+                }
+            }
+            if ($request->input('stars')) {
+                // $comments = Splade::onLazy(fn() => ServiceComment::where('donation_id', $detail_data->id)->where('ratings', $request->input('stars'))->orderBy('created_at', 'DESC')->paginate(10)->withQueryString());
+                $comments = DonationComment::where('donation_id', $detail_data->id)->where('ratings', $request->input('stars'))->orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
+            } else {
+                // $comments = Splade::onLazy(fn() => ServiceComment::where('donation_id', $detail_data->id)->orderBy('created_at', 'DESC')->paginate(10)->withQueryString());
+                $comments = DonationComment::where('donation_id', $detail_data->id)->orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
+            }
+
+            $check_user_comment = [];
+            if (Auth::check()) {
+                $user = Auth::user();
+                $check_user_comment = DonationComment::where('donation_id', $detail_data->id)->where('user_id', $user->id)->first();
             }
 
             $meta_desc = $detail_data->short_description;

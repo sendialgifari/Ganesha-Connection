@@ -416,6 +416,12 @@
                     <li>
                         <Link href="/search?type=jasa" class="text-white dark:text-white hover:underline">Jasa</Link>
                     </li>
+                    <li>
+                        <Link href="/search?type=webinar" class="text-white dark:text-white hover:underline">Informasi Webinar</Link>
+                    </li>
+                    <li>
+                        <Link href="/search?type=donasi" class="text-white dark:text-white hover:underline">Donasi</Link>
+                    </li>
                 </ul>
             </div>
         </div>

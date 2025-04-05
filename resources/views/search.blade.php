@@ -54,7 +54,7 @@
                                 'user' => request('user'),
                             ]" method="GET" action="/search"
                                 :submit-on-change="['rt', 'cat', 'adm_cat', 'adm_p_cat', 'unit', 'type']">
-                                @if ($title != 'Produk' && $title != 'Jasa')
+                                @if ($title != 'Produk' && $title != 'Jasa' && $title != 'Webinar' && $title != 'Donasi')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tipe
                                     </h6>
@@ -77,9 +77,27 @@
                                                 Jasa
                                             </label>
                                         </li>
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="webinar" name="type" value="webinar"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                Informasi Webinar
+                                            </label>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="donasi" name="type" value="donasi"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                Donasi
+                                            </label>
+                                        </li>
                                     </ul>
                                 @endif
-                                @if ($title == 'Produk' || $title == 'Jasa')
+                                @if ($title == 'Produk' || $title == 'Jasa' || $title == 'Webinar' || $title == 'Donasi')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Kategori
                                     </h6>
@@ -102,7 +120,7 @@
 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Jenis Produk / Jasa
+                                    Jenis
                                 </h6>
                                 <ul class="space-y-2 mb-4 text-sm">
                                     @foreach ($admin_categories as $idx => $item)
@@ -130,7 +148,7 @@
                                 </ul>
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Departemen Produk / Jasa
+                                    Departemen
                                 </h6>
                                 <ul class="space-y-2 mb-4 text-sm">
                                     @foreach ($admin_promotion_categories as $idx => $item)
@@ -158,12 +176,13 @@
                                 </ul>
 
 
+                                @if($search_type != "donasi")
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Harga
                                 </h6>
                                 <x-splade-input name="pmin" placeholder="Min" class="mb-2" />
                                 <x-splade-input name="pmax" placeholder="Max" class="mb-2" />
-                                
+                                @endif
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Rating
@@ -282,7 +301,7 @@
                     </div>
                     {{-- <x-splade-lazy> --}}
                     @if(count($data) == 0)
-                    <h3 class="pt-8 text-xl text-gray-900 dark:text-white sm:text-2xl text-center">Produk / Jasa tidak tersedia</h3>
+                    <h3 class="pt-8 text-xl text-gray-900 dark:text-white sm:text-2xl text-center">Data tidak tersedia</h3>
                     @endif
                     <div class="mb-4 grid gap-4 grid-cols-2 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
 
@@ -292,8 +311,16 @@
                                 <Link href="/produk/{{ $item->slug }}" id="{{ $idx }}-produk">
                             @elseif($title == 'Jasa')
                                 <Link href="/jasa/{{ $item->slug }}" id="{{ $idx }}-jasa">
+                            @elseif($title == 'Webinar')
+                                <Link href="/webinar/{{ $item->slug }}" id="{{ $idx }}-webinar">
+                            @elseif($title == 'Donasi')
+                                <Link href="/donasi/{{ $item->slug }}" id="{{ $idx }}-donasi">
                             @else
-                                <Link href="/{{ $item->type }}/{{ $item->slug }}">
+                                @if($search_type)
+                                <Link href="/{{ $search_type }}/{{ $item->slug }}" id="{{ $idx }}-search">
+                                @else
+                                <Link href="/{{ $item->type }}/{{ $item->slug }}" id="{{ $idx }}-search">
+                                @endif
                             @endif
                             <div
                                 class="rounded-lg bg-white shadow-md dark:border-gray-700 dark:bg-gray-800" >
@@ -350,14 +377,22 @@
                                     <div class="mt-1 flex items-center justify-between gap-4">
                                         <p class="text-md leading-tight text-gray-900 dark:text-white">
                                             <span class="font-extrabold">
-                                                @if($item->price_type == 0)
-                                                @if($item->price == 0)
-                                                Gratis
+                                                @if($search_type == "donasi")
+                                                Rp. {{ number_format($item->collected_amount, 0, ',', '.') }} / <span class="font-medium">Rp. {{ number_format($item->goal_amount, 0, ',', '.') }}</span>
                                                 @else
-                                                Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                @if($item->type == "donasi")
+                                                Rp. {{ number_format($item->collected_amount, 0, ',', '.') }} / <span class="font-medium">Rp. {{ number_format($item->goal_amount, 0, ',', '.') }}</span>
+                                                @else
+                                                    @if($item->price_type == 0)
+                                                    @if($item->price == 0)
+                                                    Gratis
+                                                    @else
+                                                    Rp. {{ number_format($item->price, 0, ',', '.') }}
+                                                    @endif
+                                                    @else
+                                                    Hubungi kami
+                                                    @endif
                                                 @endif
-                                                @else
-                                                Hubungi kami
                                                 @endif
                                             </span>
                                                 @if ($item->fake_price != 0 && $item->fake_price != null)<span
@@ -423,7 +458,7 @@
                                 'user' => request('user'),
                             ]" method="GET" action="/search"
                                 :submit-on-change="['rt', 'cat', 'adm_cat', 'adm_p_cat', 'unit', 'type']">
-                                @if ($title != 'Produk' && $title != 'Jasa')
+                                @if ($title != 'Produk' && $title != 'Jasa' && $title != 'Webinar' && $title != 'Donasi')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tipe
                                     </h6>
@@ -446,9 +481,27 @@
                                                 Jasa
                                             </label>
                                         </li>
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="webinar" name="type" value="webinar"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                Informasi Webinar
+                                            </label>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="donasi" name="type" value="donasi"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                Donasi
+                                            </label>
+                                        </li>
                                     </ul>
                                 @endif
-                                @if ($title == 'Produk' || $title == 'Jasa')
+                                @if ($title == 'Produk' || $title == 'Jasa' || $title == 'Webinar' || $title == 'Donasi')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Kategori
                                     </h6>
@@ -471,7 +524,7 @@
 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Jenis Produk / Jasa
+                                    Jenis
                                 </h6>
                                 <ul class="space-y-2 mb-4 text-sm">
                                     @foreach ($admin_categories as $idx => $item)
@@ -499,7 +552,7 @@
                                 </ul>
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Departemen Produk / Jasa
+                                    Departemen
                                 </h6>
                                 <ul class="space-y-2 mb-4 text-sm">
                                     @foreach ($admin_promotion_categories as $idx => $item)
@@ -527,11 +580,13 @@
                                 </ul>
 
 
+                                @if($search_type != "donasi")
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Harga
                                 </h6>
                                 <x-splade-input name="pmin" placeholder="Min" class="mb-2" />
                                 <x-splade-input name="pmax" placeholder="Max" class="mb-2" />
+                                @endif
                                 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -619,7 +674,7 @@
                                 'user' => request('user'),
                             ]" method="GET" action="/search"
                                 :submit-on-change="['rt', 'cat', 'adm_cat', 'adm_p_cat', 'unit', 'type']">
-                                @if ($title != 'Produk' && $title != 'Jasa')
+                                @if ($title != 'Produk' && $title != 'Jasa' && $title != 'Webinar' && $title != 'Donasi')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Tipe
                                     </h6>
@@ -642,9 +697,27 @@
                                                 Jasa
                                             </label>
                                         </li>
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="webinar" name="type" value="webinar"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                Informasi Webinar
+                                            </label>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <x-splade-checkbox id="donasi" name="type" value="donasi"
+                                                class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+
+                                            <label for="apple"
+                                                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                Donasi
+                                            </label>
+                                        </li>
                                     </ul>
                                 @endif
-                                @if ($title == 'Produk' || $title == 'Jasa')
+                                @if ($title == 'Produk' || $title == 'Jasa' || $title == 'Webinar' || $title == 'Donasi')
                                     <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         Kategori
                                     </h6>
@@ -667,7 +740,7 @@
 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Jenis Produk / Jasa
+                                    Jenis
                                 </h6>
                                 <ul class="space-y-2 mb-4 text-sm">
                                     @foreach ($admin_categories as $idx => $item)
@@ -695,7 +768,7 @@
                                 </ul>
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Departemen Produk / Jasa
+                                    Departemen
                                 </h6>
                                 <ul class="space-y-2 mb-4 text-sm">
                                     @foreach ($admin_promotion_categories as $idx => $item)
@@ -723,11 +796,13 @@
                                 </ul>
 
 
+                                @if($search_type != "donasi")
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Harga
                                 </h6>
                                 <x-splade-input name="pmin" placeholder="Min" class="mb-2" />
                                 <x-splade-input name="pmax" placeholder="Max" class="mb-2" />
+                                @endif
                                 
 
                                 <h6 class="mb-2 text-sm font-medium text-gray-900 dark:text-white">

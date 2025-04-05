@@ -62,6 +62,40 @@
                                         </x-nav-link>
                                 </div>
                             </x-splade-dropdown>
+                            <x-splade-dropdown>
+                                <x-slot:trigger>
+                                    <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
+                                        :active="request()->routeIs('webinar_categories.index') ||
+                                            request()->routeIs('webinars.index')">
+                                        {{ __('Webinar') }}
+                                    </x-nav-link>
+                                </x-slot>
+                                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                                    <x-dropdown-link :href="route('webinar_categories.index')">
+                                        {{ __('Kategori Webinar') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('webinars.index')">
+                                        {{ __('Webinar') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-splade-dropdown>
+                            <x-splade-dropdown>
+                                <x-slot:trigger>
+                                    <x-nav-link style="height: 65px;" href="javascript:function() { return false; }"
+                                        :active="request()->routeIs('donation_categories.index') ||
+                                            request()->routeIs('donations.index')">
+                                        {{ __('Donasi') }}
+                                    </x-nav-link>
+                                </x-slot>
+                                <div class="w-48 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 py-1 bg-white">
+                                    <x-dropdown-link :href="route('donation_categories.index')">
+                                        {{ __('Kategori Donasi') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('donations.index')">
+                                        {{ __('Donasi') }}
+                                    </x-dropdown-link>
+                                </div>
+                            </x-splade-dropdown>
                             <x-nav-link :href="route('work_units.index')" :active="request()->routeIs('work_units.index')">
                                 {{ __('Unit') }}
                             </x-nav-link>
@@ -82,6 +116,12 @@
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('service_comments.index')">
                                         {{ __('Komentar Jasa') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('webinar_comments.index')">
+                                        {{ __('Komentar Informasi Webinar') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('donation_comments.index')">
+                                        {{ __('Komentar Donasi') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
@@ -187,6 +227,12 @@
                                     </x-dropdown-link>
                                     <x-dropdown-link :href="route('service_comments.index')">
                                         {{ __('Komentar Jasa') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('webinar_comments.index')">
+                                        {{ __('Komentar Informasi Webinar') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link :href="route('donation_comments.index')">
+                                        {{ __('Komentar Donasi') }}
                                     </x-dropdown-link>
                                 </div>
                             </x-splade-dropdown>
@@ -423,6 +469,18 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin_promotion_categories.index')" :active="request()->routeIs('admin_promotion_categories.index')">
                         {{ __('Kategori Admin 2') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('webinar_categories.index')" :active="request()->routeIs('webinar_categories.index')">
+                        {{ __('Kategori Webinar') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('webinars.index')" :active="request()->routeIs('webinars.index')">
+                        {{ __('Webinar') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('donation_categories.index')" :active="request()->routeIs('donation_categories.index')">
+                        {{ __('Kategori Donasi') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('donations.index')" :active="request()->routeIs('donations.index')">
+                        {{ __('Donasi') }}
                     </x-responsive-nav-link>
                 @endrole
                 @role('admin')

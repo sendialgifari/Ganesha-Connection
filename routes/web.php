@@ -20,6 +20,12 @@ use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\StaticPageController;
 use App\Http\Controllers\WorkUnitController;
+use App\Http\Controllers\WebinarController;
+use App\Http\Controllers\WebinarCategoryController;
+use App\Http\Controllers\WebinarCommentController;
+use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DonationCategoryController;
+use App\Http\Controllers\DonationCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +80,8 @@ Route::middleware(['splade'])->group(function () {
 
             Route::middleware(['role:admin|superadmin'])->group(function () {
                 Route::resource('users', UserController::class);
+                Route::resource('webinar_categories', WebinarCategoryController::class);
+                Route::resource('donation_categories', DonationCategoryController::class);
                 Route::resource('service_categories', ServiceCategoryController::class);
                 Route::resource('product_categories', ProductCategoryController::class);
                 Route::resource('work_units', WorkUnitController::class);
@@ -92,6 +100,8 @@ Route::middleware(['splade'])->group(function () {
             Route::middleware(['role:admin|partner|superadmin'])->group(function () {
                 Route::resource('services', ServiceController::class);
                 Route::resource('products', ProductController::class);
+                Route::resource('webinars', WebinarController::class);
+                Route::resource('donations', DonationController::class);
             });
 
             Route::middleware(['role:user'])->group(function () {
@@ -113,4 +123,6 @@ Route::middleware(['splade'])->group(function () {
     Route::get('/{type}/{slug}', [LandingController::class, 'detail'])->name('detail');
     Route::resource('product_comments', ProductCommentController::class);
     Route::resource('service_comments', ServiceCommentController::class);
+    Route::resource('webinar_comments', WebinarCommentController::class);
+    Route::resource('donation_comments', DonationCommentController::class);
 });
