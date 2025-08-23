@@ -1,0 +1,105 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      # EntryPoint HTTP internal (host nginx terminates TLS)
+      - --entryPoints.web.address=:8082
+      # Optional: accesslog & metrics
+      - --accesslog=true
+      - --api.dashboard=false
+    ports:
+      - "8082:8082"
+    networks:
+      - ganeshaconnection
+    healthcheck:
+      test: ["CMD", "traefik", "version"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    depends_on:
+      - app
+    # Tidak butuh volume khusus kecuali kamu ingin file provider terpisah
+    # dynamic middlewares bisa via labels juga
+    # volumes:
+    #   - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: app
+    image: ganeshaconnection-frankenphp:latest
+    env_file:
+      - .env
+    networks:
+      - ganeshaconnection
+    volumes:
+      - ./:/app
+      - storage-data:/app/storage
+      - cache-data:/app/bootstrap/cache
+    labels:
+      # Expose only via Traefik
+      - traefik.enable=true
+      # Router utk domain
+      - traefik.http.routers.ganeshaconnection.rule=Host(`staging.ganeshaconnection.com`)
+      - traefik.http.routers.ganeshaconnection.entrypoints=web
+      - traefik.http.routers.ganeshaconnection.service=ganeshaconnection-svc
+      # Service pointing to frankenphp (HTTP) di port 8080
+      - traefik.http.services.ganeshaconnection-svc.loadbalancer.server.port=8080
+      # Middlewares: compress, security headers, rate limit, timeouts
+      - traefik.http.routers.ganeshaconnection.middlewares=ganeshaconnection-compress,ganeshaconnection-sec,ganeshaconnection-ratelimit,ganeshaconnection-buffering
+      - traefik.http.middlewares.ganeshaconnection-compress.compress=true
+      - traefik.http.middlewares.ganeshaconnection-sec.headers.stsSeconds=63072000
+      - traefik.http.middlewares.ganeshaconnection-sec.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.ganeshaconnection-sec.headers.stsPreload=true
+      - traefik.http.middlewares.ganeshaconnection-sec.headers.contentTypeNosniff=true
+      - traefik.http.middlewares.ganeshaconnection-sec.headers.browserXssFilter=true
+      - traefik.http.middlewares.ganeshaconnection-sec.headers.frameDeny=true
+      # Rate limit (example: 100 req/s burst 200 per source IP)
+      - traefik.http.middlewares.ganeshaconnection-ratelimit.ratelimit.average=100
+      - traefik.http.middlewares.ganeshaconnection-ratelimit.ratelimit.burst=200
+      # Buffering (hindari slowloris; cocok utk upload juga)
+      - traefik.http.middlewares.ganeshaconnection-buffering.buffering.maxRequestBodyBytes=134217728
+      - traefik.http.middlewares.ganeshaconnection-buffering.buffering.memRequestBodyBytes=2097152
+      - traefik.http.middlewares.ganeshaconnection-buffering.buffering.retryExpression=IsNetworkError() && Attempts() <= 2
+
+  queue:
+    image: ganeshaconnection-frankenphp:latest
+    depends_on:
+      - app
+    env_file:
+      - .env
+    command: php artisan queue:work --sleep=3 --timeout=1000 --tries=3
+    networks:
+      - ganeshaconnection
+    volumes:
+      - ./:/app
+      - storage-data:/app/storage
+      - cache-data:/app/bootstrap/cache
+
+  scheduler:
+    image: ganeshaconnection-frankenphp:latest
+    depends_on:
+      - app
+    env_file:
+      - .env
+    command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+    networks:
+      - ganeshaconnection
+    volumes:
+      - ./:/app
+      - storage-data:/app/storage
+      - cache-data:/app/bootstrap/cache
+
+networks:
+  ganeshaconnection:
+    driver: bridge
+
+volumes:
+  storage-data:
+  cache-data:
